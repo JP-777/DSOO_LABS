@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class Matricula {
-    private String idMatricula;
+    private String codigo;
     private Alumno alumnoRef;
     private Curso cursoRef;
     private ArrayList<Double> notas;
@@ -15,12 +15,12 @@ public class Matricula {
         this.notas = notas;
     }
 
-    public String getIdMatricula() { return idMatricula; }
+    public String getCodigo() { return codigo; }
     public Alumno getAlumnoRef() { return alumnoRef; }
     public Curso getCursoRef() { return cursoRef; }
     public ArrayList<Double> getNotas() { return notas; }
 
-    public void setIdMatricula(String idMatricula) { this.idMatricula = idMatricula; }
+    public void setCodigo(String codigo) { this.codigo = codigo; }
     public void setAlumnoRef(Alumno alumnoRef) { this.alumnoRef = alumnoRef; }
     public void setCursoRef(Curso cursoRef) { this.cursoRef = cursoRef; }
 
@@ -47,5 +47,15 @@ public class Matricula {
 
     public boolean isAprobado(){
         return calcularPromedio() >= 10.5;
+    }
+
+    @Override
+    public String toString() {
+        return "Matricula{" +
+            "codigo='" + codigo + '\'' +
+            ", alumno=" + alumnoRef.getNombres() + " " + alumnoRef.getApellidos() +
+            ", curso=" + cursoRef.getNombre() +
+            ", promedio=" + calcularPromedio() +
+            '}';
     }
 }
