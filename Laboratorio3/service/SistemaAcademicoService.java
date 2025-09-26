@@ -15,11 +15,11 @@ public class SistemaAcademicoService {
     private DocenteRepo docenteRepo;
     private MatriculaRepo matriculaRepo;
 
-    public SistemaAcademicoService(){
-        alumnoRepo = new AlumnoRepo();
-        cursoRepo = new CursoRepo();
-        docenteRepo = new DocenteRepo();
-        matriculaRepo = new MatriculaRepo();
+    public SistemaAcademicoService(AlumnoRepo alRepo, DocenteRepo docRepo, CursoRepo curRepo, MatriculaRepo matRepo) {
+        this.alumnoRepo = alRepo;
+        this.cursoRepo = curRepo;
+        this.docenteRepo = docRepo;
+        this.matriculaRepo = matRepo;
     }
 
     // Metodos para Alumno
@@ -62,7 +62,9 @@ public class SistemaAcademicoService {
     }
 
     // Metodos para Matricula
-    public void agregarMatricula(Alumno alumnoRef, Curso cursoRef){
+    public void agregarMatricula(String alumnoCod, String cursoCod){
+        Alumno alumnoRef = alumnoRepo.buscarPorCodigo(alumnoCod);
+        Curso cursoRef = cursoRepo.buscarPorCodigo(cursoCod);
         matriculaRepo.agregarMatricula(new Matricula(alumnoRef,cursoRef));
     }
     
