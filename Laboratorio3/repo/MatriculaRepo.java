@@ -2,7 +2,10 @@ package repo;
 
 import model.Matricula;
 import model.Alumno;
+import model.Curso;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class MatriculaRepo {
     private ArrayList<Matricula> matriculas;
