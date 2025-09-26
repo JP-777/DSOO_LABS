@@ -23,8 +23,8 @@ public class SistemaAcademicoService {
     }
 
     // Metodos para Alumno
-    public void agregarAlumno(Alumno a){
-        alumnoRepo.agregarAlumno(a);
+    public void agregarAlumno(String codigo, String nombres, String apellidos, String dni, int edad){
+        alumnoRepo.agregarAlumno(new Alumno(codigo, nombres, apellidos, dni, edad));
     }
 
     public Alumno buscarAlumno(String codigo){
@@ -36,8 +36,8 @@ public class SistemaAcademicoService {
     }
 
     // Metodos para Curso
-    public void agregarCurso(Curso c){
-        cursoRepo.agregarCurso(c);
+    public void agregarCurso(String codigo, String nombre, Docente docente){
+        cursoRepo.agregarCurso(new Curso(codigo,nombre,docente));
     }
 
     public Curso buscarCurso(String codigo){
@@ -49,8 +49,8 @@ public class SistemaAcademicoService {
     }
 
     // Metodos para Docente
-    public void agregarDocente(Docente d){
-        docenteRepo.agregarDocente(d);
+    public void agregarDocente(String dni, String nombres, String apellidos, String especialidad, int añosExperiencia){
+        docenteRepo.agregarDocente(new Docente(dni,nombres,apellidos,especialidad,añosExperiencia));
     }
 
     public Docente buscarDocente(String codigo){
@@ -62,8 +62,8 @@ public class SistemaAcademicoService {
     }
 
     // Metodos para Matricula
-    public void agregarMatricula(Matricula m){
-        matriculaRepo.agregarMatricula(m);
+    public void agregarMatricula(Alumno alumnoRef, Curso cursoRef, ArrayList<Double> notas){
+        matriculaRepo.agregarMatricula(new Matricula(alumnoRef,cursoRef,notas));
     }
 
     public ArrayList<Matricula> buscarMatriculasPorAlumno(String codigoA){
