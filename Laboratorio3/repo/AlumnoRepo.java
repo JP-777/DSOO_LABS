@@ -1,24 +1,17 @@
 package repo;
-
 import java.util.ArrayList;
-
 import model.Alumno;
-
 public class AlumnoRepo {
     private ArrayList<Alumno> alumnos;
-
     public AlumnoRepo() {
         alumnos = new ArrayList<>();
     }
-
     //registrar alumno
     public void agregarAlumno(Alumno alumno) {
         alumnos.add(alumno); }
-
     //listar todos los alumnos
     public ArrayList<Alumno> listarAlumnos() {
         return alumnos;}
-
     // Buscar por código
     public Alumno buscarPorCodigo(String codigo) {
         for (Alumno a : alumnos) {

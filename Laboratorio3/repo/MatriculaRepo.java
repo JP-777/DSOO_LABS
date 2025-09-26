@@ -1,17 +1,13 @@
 package repo;
-
 import model.Matricula;
 import model.Alumno;
 import java.util.ArrayList;
-
 public class MatriculaRepo {
     private ArrayList<Matricula> matriculas;
     private int contCodigo = 1;
-
     public MatriculaRepo(){
         matriculas = new ArrayList<>();
     }
-
     public void agregarMatricula(Matricula mat){ 
         for(int i = 0; i < matriculas.size(); i++){
             if (matriculas.get(i).getAlumnoRef().getCodigo().equals(mat.getAlumnoRef().getCodigo()) && 
@@ -24,7 +20,6 @@ public class MatriculaRepo {
         contCodigo++;
         matriculas.add(mat);
     }
-
     public ArrayList<Matricula> buscarPorAlumno(String codigoA){
         ArrayList<Matricula> matriculasAlumno = new ArrayList<>();
         for(int i=0; i<matriculas.size(); i++){
@@ -33,7 +28,6 @@ public class MatriculaRepo {
         }
         return matriculasAlumno;
     }
-
     public ArrayList<Matricula> buscarPorCurso(String codigoC){
         ArrayList<Matricula> matriculasCurso = new ArrayList<>();
         for(int i=0; i<matriculas.size(); i++){
@@ -42,7 +36,6 @@ public class MatriculaRepo {
         }
         return matriculasCurso;
     }
-
     public double obtenerPromedioAlumno(String codigoA){
         double sumatoria = 0;
         ArrayList<Matricula> matriculasAlumno = buscarPorAlumno(codigoA);
@@ -55,7 +48,6 @@ public class MatriculaRepo {
         }
         return Math.round((sumatoria/matriculasAlumno.size()) * 100.0)/ 100.0;
     }
-
     public Alumno obtenerAlumnoConMejorPromedio(AlumnoRepo listaAlumnos){
         if (listaAlumnos.listarAlumnos().isEmpty()) return null;
         Alumno alumnoPromedioMayor = listaAlumnos.listarAlumnos().get(0);
@@ -68,7 +60,6 @@ public class MatriculaRepo {
         }
         return alumnoPromedioMayor;
     }
-
     public ArrayList<Alumno> ListarDesaprobados(String codigoC){
         ArrayList<Alumno> desaprobados = new ArrayList<>();
         ArrayList<Matricula> matriculados = buscarPorCurso(codigoC);
