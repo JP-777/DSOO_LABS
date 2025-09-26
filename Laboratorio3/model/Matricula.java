@@ -6,7 +6,7 @@ public class Matricula {
     private String codigo;
     private Alumno alumnoRef;
     private Curso cursoRef;
-    private ArrayList<Double> notas;
+    private ArrayList<Double> notas = new ArrayList<>();
     private static final int LIMITE_NOTAS = 3;
 
     public Matricula (Alumno alumnoRef, Curso cursoRef){
