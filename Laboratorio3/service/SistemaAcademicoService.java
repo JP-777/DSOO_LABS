@@ -62,9 +62,22 @@ public class SistemaAcademicoService {
     }
 
     // Metodos para Matricula
-    public void agregarMatricula(Alumno alumnoRef, Curso cursoRef, ArrayList<Double> notas){
-        matriculaRepo.agregarMatricula(new Matricula(alumnoRef,cursoRef,notas));
+    public void agregarMatricula(Alumno alumnoRef, Curso cursoRef){
+        matriculaRepo.agregarMatricula(new Matricula(alumnoRef,cursoRef));
     }
+    
+    // Agregar nota a un alumno en un curso
+    public void agregarNotaAlumnoCurso(String codigoAlumno, String codigoCurso, double nota) {
+        ArrayList<Matricula> matriculasAlumno = matriculaRepo.buscarPorAlumno(codigoAlumno);
+        for (Matricula m : matriculasAlumno) {
+            if (m.getCursoRef().getCodigo().equals(codigoCurso)) {
+                m.agregarNota(nota);
+                return;
+            }
+        }
+        System.out.println("No se encontró la matrícula del alumno en ese curso.");
+    }
+
 
     public ArrayList<Matricula> buscarMatriculasPorAlumno(String codigoA){
         return matriculaRepo.buscarPorAlumno(codigoA);
