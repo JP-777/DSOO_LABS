@@ -1,8 +1,8 @@
-package DSOO_LABS.Laboratorio3.repo;
+package repo;
 
 import java.util.ArrayList;
 
-import DSOO_LABS.Laboratorio3.model.Alumno;
+import model.Alumno;
 
 public class AlumnoRepo {
     private ArrayList<Alumno> alumnos;

@@ -1,6 +1,7 @@
 package repo;
 
 import model.Matricula;
+import model.Alumno;
 import java.util.ArrayList;
 
 public class MatriculaRepo {

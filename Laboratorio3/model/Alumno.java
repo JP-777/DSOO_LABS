@@ -1,4 +1,4 @@
-package DSOO_LABS.Laboratorio3.model;
+package model;
 
 import java.util.Objects;
 
