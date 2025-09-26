@@ -12,12 +12,7 @@ public class MatriculaRepo {
         matriculas = new ArrayList<>();
     }
 
-    public void agregarMatricula(Matricula mat){
-        if (mat.getNotas().size() < 3) {
-            System.out.println("Alumno con falta de notas");
-            return;
-        }
-            
+    public void agregarMatricula(Matricula mat){ 
         for(int i = 0; i < matriculas.size(); i++){
             if (matriculas.get(i).getAlumnoRef().getCodigo().equals(mat.getAlumnoRef().getCodigo()) && 
                 matriculas.get(i).getCursoRef().getCodigo().equals(mat.getCursoRef().getCodigo())) {

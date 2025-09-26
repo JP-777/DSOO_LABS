@@ -9,10 +9,10 @@ public class Matricula {
     private ArrayList<Double> notas;
     private static final int LIMITE_NOTAS = 3;
 
-    public Matricula (Alumno alumnoRef, Curso cursoRef, ArrayList<Double> notas){
+    public Matricula (Alumno alumnoRef, Curso cursoRef){
         this.alumnoRef = alumnoRef;
         this.cursoRef = cursoRef;
-        this.notas = notas;
+        this.notas = new ArrayList<>();
     }
 
     public String getCodigo() { return codigo; }
