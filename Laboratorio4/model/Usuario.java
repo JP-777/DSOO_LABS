@@ -24,6 +24,6 @@ public class Usuario {
     }
 
     public boolean verificarDisponible (Libro libro) {
-        return libro.isDisponible();
+        return libro.estaDisponible();
     }
 }

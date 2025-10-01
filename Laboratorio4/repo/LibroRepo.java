@@ -15,7 +15,7 @@ public class LibroRepo {
     //metodo para buscar libro
     public Libro buscarPorIsbn(String isbn) {
         for (Libro libro : libros) {
-            if (libro.getIsbn().equalsIgnoreCase(isbn)) {
+            if (libro.getISBN().equalsIgnoreCase(isbn)) {
                 return libro;
             }
         }

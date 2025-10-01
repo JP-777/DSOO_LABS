@@ -1,13 +1,9 @@
 package model;
-
-import java.util.StringTokenizer;
-
 public class Libro{
     private String titulo;
     private String autor;
     private String ISBN;
-    private boolean disponible;
-    
+    private boolean disponible; 
     //constuctor con parámetros para inicializarlo una vez creado
     public Libro(String titulo, String autor, String ISBN, boolean disponible){
         this.titulo = titulo;
