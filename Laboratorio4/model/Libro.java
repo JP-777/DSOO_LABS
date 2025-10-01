@@ -1,15 +1,24 @@
 package model;
- public class Libro{
+
+import java.util.StringTokenizer;
+
+public class Libro{
     private String titulo;
     private String autor;
     private String ISBN;
     private boolean disponible;
     
+    //constuctor con parámetros para inicializarlo una vez creado
     public Libro(String titulo, String autor, String ISBN, boolean disponible){
         this.titulo = titulo;
         this.autor = autor;
         this.ISBN = ISBN;
         this.disponible = disponible;
+    }
+    
+    //constructor vacío para crear objeto sin inicializarlo todavía
+    public Libro(){
+        this("", "", "", true);
     }
 
     public String getTitulo (){return titulo;}
@@ -17,6 +26,10 @@ package model;
     public String getISBN (){return ISBN;}
     public boolean estaDisponible (){return disponible;}
     
+    @Override
+    public String toString(){
+        return "Título: "+titulo+", Autor: "+autor+", ISBN: "+ISBN+", Disponibilidad: "+(disponible);
+    }
  }
 // Para la clase Usuario se hizo uso de la disponibilidad del libro
     //Para el metodo accesor usar isDisponible()
