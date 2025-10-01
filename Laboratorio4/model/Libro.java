@@ -17,6 +17,7 @@ public class Libro{
     }
     
     //constructor vacío para crear objeto sin inicializarlo todavía
+    //Se debe llenar en el orden preestablecido de los atributos
     public Libro(){
         this("", "", "", true);
     }
@@ -26,6 +27,11 @@ public class Libro{
     public String getISBN (){return ISBN;}
     public boolean estaDisponible (){return disponible;}
     
+    public void setTitulo(String titulo){this.titulo = titulo;}
+    public void setAutor(String autor){this.autor = autor;}
+    public void setISBN(String ISBN){this.ISBN = ISBN;}
+    public void setDisponible(boolean disponible){this.disponible = disponible;}
+
     @Override
     public String toString(){
         return "Título: "+titulo+", Autor: "+autor+", ISBN: "+ISBN+", Disponibilidad: "+(disponible);
