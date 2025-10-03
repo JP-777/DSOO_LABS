@@ -21,24 +21,6 @@ public class Usuario {
     public String getId() { return id; }
     public ArrayList<Libro> getLibrosPrestados() { return librosPrestados; }
 
-    public boolean tomarPrestado(Libro libro) {
-        if (libro.estaDisponible() && !librosPrestados.contains(libro)) {
-            libro.setDisponible(false);
-            librosPrestados.add(libro);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean devolverLibro(Libro libro) {
-        if (librosPrestados.contains(libro)) {
-            libro.setDisponible(true);
-            librosPrestados.remove(libro);
-            return true;
-        }
-        return false;
-    }
-
     public boolean tieneLibro(Libro libro) {
         return librosPrestados.contains(libro);
     }
