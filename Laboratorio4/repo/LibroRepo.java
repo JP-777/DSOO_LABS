@@ -23,7 +23,7 @@ public class LibroRepo {
         
         Libro libro = new Libro(titulo, autor, isbn);
         libros.add(libro);
-        System.out.println("✓ Libro agregado exitosamente.");
+        System.out.println("Libro agregado exitosamente.");
     }
 
     // Método con interacción para buscar y mostrar libro por ISBN
@@ -34,10 +34,10 @@ public class LibroRepo {
         Libro libro = buscarPorIsbn(isbn);
         
         if (libro != null) {
-            System.out.println("\n✓ Libro encontrado:");
+            System.out.println("\nLibro encontrado:");
             System.out.println(libro);
         } else {
-            System.out.println("\n❌ Libro no encontrado.");
+            System.out.println("\nLibro no encontrado.");
         }
     }
 

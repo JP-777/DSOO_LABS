@@ -22,7 +22,7 @@ public class UsuarioRepo {
         
         Usuario usuario = new Usuario(nombre, id);
         usuarios.add(usuario);
-        System.out.println("✓ Usuario registrado exitosamente.");
+        System.out.println("Usuario registrado exitosamente.");
     }
 
     // Método interno para buscar usuario (usado por otros métodos)
