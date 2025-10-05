@@ -1,55 +1,83 @@
 package repo;
-
 import model.Libro;
 import java.util.ArrayList;
+import java.util.Scanner;
 
-//clase repositorio que gestiona los libros
 public class LibroRepo {
     private ArrayList<Libro> libros;
+    private Scanner scanner;
 
-    public LibroRepo() {
+    public LibroRepo(Scanner scanner) {
         this.libros = new ArrayList<>();
+        this.scanner = scanner;
     }
 
-    // metodo para agregar un libro
-    public void agregarLibro(Libro libro) {
+    // Método con interacción para agregar un libro
+    public void agregarLibro() {
+        System.out.println("\n=== AGREGAR NUEVO LIBRO ===");
+        System.out.print("Título: ");
+        String titulo = scanner.nextLine();
+        System.out.print("Autor: ");
+        String autor = scanner.nextLine();
+        System.out.print("ISBN: ");
+        String isbn = scanner.nextLine();
+        
+        Libro libro = new Libro(titulo, autor, isbn);
         libros.add(libro);
+        System.out.println("✓ Libro agregado exitosamente.");
     }
 
-    // metodo para buscar libro
+    // Método con interacción para buscar y mostrar libro por ISBN
+    public void buscarYMostrarPorIsbn() {
+        System.out.print("\nISBN del libro: ");
+        String isbn = scanner.nextLine();
+        Libro libro = buscarPorIsbn(isbn);
+        
+        if (libro != null) {
+            System.out.println("\n✓ Libro encontrado:");
+            System.out.println(libro);
+        } else {
+            System.out.println("\n❌ Libro no encontrado.");
+        }
+    }
+
+    // Método interno para buscar libro (usado por otros métodos)
     public Libro buscarPorIsbn(String isbn) {
         for (Libro libro : libros) {
             if (libro.getISBN().equalsIgnoreCase(isbn)) {
                 return libro;
             }
         }
-        return null; // si no encuentra
+        return null;
     }
 
-    // Método para buscar libros por título
-    public ArrayList<Libro> buscarPorTitulo(String titulo) {
-        ArrayList<Libro> encontrados = new ArrayList<>();
-        for (Libro libro : libros) {
-            if (libro.getTitulo().toLowerCase().contains(titulo.toLowerCase())) {
-                encontrados.add(libro);
-            }
+    // Método con interacción para mostrar todos los libros
+    public void mostrarTodos() {
+        if (libros.isEmpty()) {
+            System.out.println("\nNo hay libros en el catálogo.");
+            return;
         }
-        return encontrados;
+        
+        System.out.println("\n========== CATÁLOGO DE LIBROS ==========");
+        for (int i = 0; i < libros.size(); i++) {
+            System.out.println((i + 1) + ". " + libros.get(i));
+        }
+        System.out.println("=========================================\n");
     }
-
-    // Método para obtener todos los libros
-    public ArrayList<Libro> obtenerTodos() {
-        return new ArrayList<>(libros);
-    }
-
-    // Método para obtener solo libros disponibles
-    public ArrayList<Libro> obtenerDisponibles() {
-        ArrayList<Libro> disponibles = new ArrayList<>();
+    
+    // Método con interacción para mostrar libros disponibles
+    public void mostrarDisponibles() {
+        System.out.println("\n===== LIBROS DISPONIBLES =====");
+        boolean hayDisponibles = false;
         for (Libro libro : libros) {
             if (libro.estaDisponible()) {
-                disponibles.add(libro);
+                System.out.println("  " + libro);
+                hayDisponibles = true;
             }
         }
-        return disponibles;
+        if (!hayDisponibles) {
+            System.out.println("No hay libros disponibles actualmente.");
+        }
+        System.out.println("==============================\n");
     }
 }
