@@ -6,15 +6,14 @@ import java.util.Scanner;
 
 public class UsuarioRepo {
     private ArrayList<Usuario> usuarios;
-    private Scanner scanner;
 
-    public UsuarioRepo(Scanner scanner) {
+    public UsuarioRepo() {
         this.usuarios = new ArrayList<>();
-        this.scanner = scanner;
     }
 
     // Método con interacción para registrar usuario
     public void registrarUsuario() {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("\n=== REGISTRAR NUEVO USUARIO ===");
         System.out.print("Nombre: ");
         String nombre = scanner.nextLine();
@@ -69,5 +68,4 @@ public class UsuarioRepo {
         }
         return false;
     }
-
 }

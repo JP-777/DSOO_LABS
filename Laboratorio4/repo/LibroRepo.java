@@ -1,19 +1,18 @@
-package repo;
+ package repo;
 import model.Libro;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class LibroRepo {
     private ArrayList<Libro> libros;
-    private Scanner scanner;
 
-    public LibroRepo(Scanner scanner) {
+    public LibroRepo() {
         this.libros = new ArrayList<>();
-        this.scanner = scanner;
     }
 
     // Método con interacción para agregar un libro
     public void agregarLibro() {
+        Scanner scanner = new Scanner(System.in);
         System.out.println("\n=== AGREGAR NUEVO LIBRO ===");
         System.out.print("Título: ");
         String titulo = scanner.nextLine();
@@ -29,6 +28,7 @@ public class LibroRepo {
 
     // Método con interacción para buscar y mostrar libro por ISBN
     public void buscarYMostrarPorIsbn() {
+        Scanner scanner = new Scanner(System.in);
         System.out.print("\nISBN del libro: ");
         String isbn = scanner.nextLine();
         Libro libro = buscarPorIsbn(isbn);
