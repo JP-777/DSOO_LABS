@@ -6,5 +6,29 @@ public class Paciente {
     private int edad;
     private int dni;
 
-    
+    public Paciente(String codigo, String nombre, int edad, int dni) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.edad = edad;
+        this.dni = dni;
+    }
+
+    public String getCodigo() { return codigo; }
+    public String getNombre() { return nombre; }
+    public int getEdad() { return edad; }
+    public int getDni() { return dni; }
+
+    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setEdad(int edad) { this.edad = edad; }
+    public void setDni(int dni) { this.dni = dni; }
+
+    @Override
+    public String toString() {
+        return "Paciente{" +
+                "codigo='" + codigo + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", edad=" + edad +
+                ", documento='" + dni + '\'' +
+                '}';
+    }
 }
