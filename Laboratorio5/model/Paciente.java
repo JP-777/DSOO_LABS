@@ -6,14 +6,14 @@ public class Paciente {
     private int edad;
     private int dni;
 
-    public Paciente(String codigo, String nombre, int edad, int dni) {
+    public Paciente(int codigo, String nombre, int edad, int dni) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.edad = edad;
         this.dni = dni;
     }
 
-    public String getCodigo() { return codigo; }
+    public int getCodigo() { return codigo; }
     public String getNombre() { return nombre; }
     public int getEdad() { return edad; }
     public int getDni() { return dni; }
