@@ -8,13 +8,12 @@ public class UsuarioRepo {
     private ArrayList<Usuario> usuarios;
 
     public UsuarioRepo() {
-        this.usuarios = new ArrayList<>();
-    }
+        this.usuarios = new ArrayList<>(); }
 
-    // Método con interacción para registrar usuario
+    //metodo con interacción para registrar usuario
     public void registrarUsuario() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("\n=== REGISTRAR NUEVO USUARIO ===");
+        System.out.println("\nREGISTRAR NUEVO USUARIO");
         System.out.print("Nombre: ");
         String nombre = scanner.nextLine();
         System.out.print("ID de usuario: ");
@@ -23,33 +22,31 @@ public class UsuarioRepo {
         Usuario usuario = new Usuario(nombre, id);
         usuarios.add(usuario);
         System.out.println("Usuario registrado exitosamente.");
-    }
+        }
 
-    // Método interno para buscar usuario (usado por otros métodos)
+    // metodo interno para buscar usuario (usado por otros métodos)
     public Usuario buscarPorId(String id) {
         for (Usuario usuario : usuarios) {
             if (usuario.getId().equalsIgnoreCase(id)) {
                 return usuario;
             }
         }
-        return null;
-    }
+        return null; }
 
-    // Método con interacción para mostrar todos los usuarios
+    // metodo con interaccion para mostrar todos los usuarios
     public void mostrarTodos() {
         if (usuarios.isEmpty()) {
             System.out.println("\nNo hay usuarios registrados.");
             return;
         }
         
-        System.out.println("\n========== USUARIOS REGISTRADOS ==========");
+        System.out.println("\nUSUARIOS REGISTRADOS");
         for (int i = 0; i < usuarios.size(); i++) {
             System.out.println((i + 1) + ". " + usuarios.get(i));
         }
-        System.out.println("==========================================\n");
     }
 
-    // Método para tomar un libro prestado (usado por el servicio)
+    // metodo para tomar un libro prestado (usado por el servicio)
     public boolean tomarPrestado(Usuario usuario, Libro libro) {
         if (libro.estaDisponible() && !usuario.getLibrosPrestados().contains(libro)) {
             libro.setDisponible(false);
@@ -59,7 +56,7 @@ public class UsuarioRepo {
         return false;
     }
 
-    // Método para devolver un libro (usado por el servicio)
+    // metodo para devolver un libro (usado por el servicio)
     public boolean devolverLibro(Usuario usuario, Libro libro) {
         if (usuario.getLibrosPrestados().contains(libro)) {
             libro.setDisponible(true);
@@ -69,3 +66,4 @@ public class UsuarioRepo {
         return false;
     }
 }
+    
