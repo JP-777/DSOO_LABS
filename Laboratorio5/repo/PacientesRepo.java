@@ -22,7 +22,7 @@ public class PacientesRepo {
         }
 
         if (buscarPorDni(p.getDni()) != null) {
-            System.out.println("❌ Error: ya existe un paciente con el documento " + p.getDocumento());
+            System.out.println("❌ Error: ya existe un paciente con el documento " + p.getDni());
             return false;
         }
 
@@ -31,9 +31,9 @@ public class PacientesRepo {
         return true;
     }
 
-    public Paciente buscarPorCodigo(String codigo) {
+    public Paciente buscarPorCodigo(int codigo) {
         for (Paciente p : listaPacientes) {
-            if (p.getCodigo().equalsIgnoreCase(codigo)) {
+            if (p.getCodigo() == codigo) {
                 return p;
             }
         }
@@ -42,7 +42,7 @@ public class PacientesRepo {
 
     public Paciente buscarPorDni(int dni) {
         for (Paciente p : listaPacientes) {
-            if (p.getDni().equalsIgnoreCase(documento)) {
+            if (p.getDni() == dni) {
                 return p;
             }
         }
