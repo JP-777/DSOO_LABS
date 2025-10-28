@@ -9,7 +9,7 @@ public class Reporte {
         this.listaCitas = listaCitas;
     }
 
-    // Mostrar todas las citas programadas
+    //mostrar todas las citas programadas
     public void mostrarTodasLasCitas() {
         System.out.println("\n=== TODAS LAS CITAS PROGRAMADAS ===");
         if (listaCitas == null || listaCitas.isEmpty()) {
@@ -22,7 +22,7 @@ public class Reporte {
         }
     }
 
-    // Listar citas por doctor
+    //listar citas por doctor
     public void listarCitasPorDoctor(int codigoDoctor) {
         System.out.println("\n=== CITAS DEL DOCTOR (Código: " + codigoDoctor + ") ===");
         if (listaCitas == null || listaCitas.isEmpty()) {
@@ -43,7 +43,7 @@ public class Reporte {
         }
     }
 
-    // Listar citas por paciente
+    //listar citas por paciente
     public void listarCitasPorPaciente(int codigoPaciente) {
         System.out.println("\n=== CITAS DEL PACIENTE (Código: " + codigoPaciente + ") ===");
         if (listaCitas == null || listaCitas.isEmpty()) {
@@ -64,8 +64,8 @@ public class Reporte {
         }
     }
 
-    // Mostrar totales de citas
-    // (Se cuenta el total y se puede extender más adelante para estados si se agregan)
+    // mostrar totales de citas
+    // (Se cuenta el total y se puede extender mas adelante para estados si se agregan)
     public void mostrarTotales() {
         System.out.println("\n=== ESTADÍSTICAS DE CITAS ===");
         if (listaCitas == null || listaCitas.isEmpty()) {
