@@ -4,9 +4,6 @@ import DSOO_LABS.laboratorio7.model.Transaccion;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Repositorio general para todas las transacciones (depósitos y retiros).
- */
 public class TransaccionRepo {
     private List<Transaccion> listaTransacciones;
 

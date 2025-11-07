@@ -3,10 +3,6 @@ package DSOO_LABS.laboratorio7.main;
 import DSOO_LABS.laboratorio7.service.BancoService;
 import java.util.Scanner;
 
-/**
- * Clase principal del sistema bancario.
- * Muestra un menú interactivo por consola y usa los métodos del BancoService.
- */
 public class BancoMain {
 
     public static void main(String[] args) {
@@ -18,8 +14,8 @@ public class BancoMain {
             mostrarMenu();
             System.out.print("Seleccione una opción: ");
             opcion = sc.nextInt();
-            sc.nextLine(); // limpiar buffer
-
+            sc.nextLine(); 
+            
             switch (opcion) {
                 case 1:
                     bancoService.listarClientes();

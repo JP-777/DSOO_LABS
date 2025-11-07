@@ -5,16 +5,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Repositorio para cuentas bancarias.
- */
 public class CuentaRepo {
     private List<Cuenta> listaCuentas;
 
     public CuentaRepo() {
         this.listaCuentas = new ArrayList<>();
 
-        // Datos precargados
         listaCuentas.add(new Cuenta("1001", "Ahorros", 1500.00, LocalDate.of(2024, 1, 10)));
         listaCuentas.add(new Cuenta("1002", "Corriente", 2500.00, LocalDate.of(2024, 3, 5)));
     }

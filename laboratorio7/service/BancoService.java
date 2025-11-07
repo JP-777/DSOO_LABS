@@ -7,10 +7,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * Clase de servicio principal del sistema bancario.
- * Coordina la interacción entre los repositorios y las operaciones de negocio.
- */
 public class BancoService {
 
     private ClienteRepo clienteRepo;
@@ -26,11 +22,6 @@ public class BancoService {
         this.titularidadRepo = new TitularidadRepo(clienteRepo, cuentaRepo);
         this.transaccionRepo = new TransaccionRepo();
     }
-
-    // ============================
-    // MÉTODOS DE CONSULTA
-    // ============================
-
     public void listarClientes() {
         clienteRepo.listarClientes();
     }
@@ -91,10 +82,6 @@ public class BancoService {
         }
     }
 
-    // ============================
-    // MÉTODOS DE OPERACIONES
-    // ============================
-
     public void realizarDeposito(String numeroCuenta, double monto, String idEmpleado) {
         Cuenta cuenta = cuentaRepo.buscarPorNumero(numeroCuenta);
         Empleado empleado = empleadoRepo.buscarPorId(idEmpleado);
@@ -143,10 +130,6 @@ public class BancoService {
         transaccionRepo.registrarTransaccion(retiro);
     }
 
-    // ============================
-    // MÉTODOS DE APOYO (para el menú)
-    // ============================
-
     public void menuInteractivo() {
         Scanner sc = new Scanner(System.in);
         int opcion;
@@ -164,7 +147,7 @@ public class BancoService {
             System.out.print("Seleccione una opción: ");
 
             opcion = sc.nextInt();
-            sc.nextLine(); // limpiar buffer
+            sc.nextLine(); 
 
             switch (opcion) {
                 case 1:

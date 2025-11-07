@@ -7,16 +7,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Repositorio que gestiona las titularidades entre clientes y cuentas.
- */
 public class TitularidadRepo {
     private List<Titularidad> listaTitularidades;
 
     public TitularidadRepo(ClienteRepo clienteRepo, CuentaRepo cuentaRepo) {
         this.listaTitularidades = new ArrayList<>();
 
-        // Asociación inicial: Ana -> 1001, Luis -> 1002
         Cliente ana = clienteRepo.buscarPorId("C001");
         Cliente luis = clienteRepo.buscarPorId("C002");
         Cuenta cta1 = cuentaRepo.buscarPorNumero("1001");

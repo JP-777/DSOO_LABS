@@ -2,9 +2,6 @@ package DSOO_LABS.laboratorio7.model;
 
 import java.time.LocalDateTime;
 
-/**
- * Representa un retiro de una cuenta bancaria.
- */
 public class Retiro extends Transaccion {
 
     public Retiro(String idTransaccion, LocalDateTime fecha, double monto, Empleado empleado, Cuenta cuenta) {

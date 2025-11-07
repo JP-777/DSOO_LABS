@@ -5,9 +5,6 @@ import DSOO_LABS.laboratorio7.model.Persona;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Repositorio base para manejar personas (padre de Cliente y Empleado).
- */
 public class PersonaRepo {
     protected List<Persona> listaPersonas;
 

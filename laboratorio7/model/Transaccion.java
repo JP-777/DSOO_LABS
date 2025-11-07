@@ -2,16 +2,12 @@ package DSOO_LABS.laboratorio7.model;
 
 import java.time.LocalDateTime;
 
-/**
- * Clase abstracta que representa una transacción bancaria.
- * Es la base para Depósito y Retiro.
- */
 public abstract class Transaccion {
     protected String idTransaccion;
     protected LocalDateTime fecha;
     protected double monto;
-    protected Empleado empleado; // quien procesó la transacción
-    protected Cuenta cuenta;     // cuenta asociada
+    protected Empleado empleado; 
+    protected Cuenta cuenta;     
 
     public Transaccion(String idTransaccion, LocalDateTime fecha, double monto, Empleado empleado, Cuenta cuenta) {
         this.idTransaccion = idTransaccion;

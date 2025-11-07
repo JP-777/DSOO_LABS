@@ -2,14 +2,11 @@ package DSOO_LABS.laboratorio7.model;
 
 import java.time.LocalDate;
 
-/**
- * Clase asociativa entre Cliente y Cuenta.
- */
 public class Titularidad {
     private Cliente cliente;
     private Cuenta cuenta;
     private LocalDate fechaInicio;
-    private String tipoTitular; // Principal o Secundario
+    private String tipoTitular; 
 
     public Titularidad(Cliente cliente, Cuenta cuenta, LocalDate fechaInicio, String tipoTitular) {
         this.cliente = cliente;

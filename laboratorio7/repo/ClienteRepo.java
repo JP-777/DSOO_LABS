@@ -5,16 +5,12 @@ import DSOO_LABS.laboratorio7.model.Cuenta;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Repositorio para clientes, con datos precargados.
- */
 public class ClienteRepo {
     private List<Cliente> listaClientes;
 
     public ClienteRepo() {
         this.listaClientes = new ArrayList<>();
 
-        // Datos precargados
         listaClientes.add(new Cliente("C001", "12345678", "Ana", "López", "Av. Grau 123", "987654321", "ana@mail.com", "Activo"));
         listaClientes.add(new Cliente("C002", "87654321", "Luis", "Pérez", "Calle Lima 456", "999888777", "luis@mail.com", "Activo"));
     }

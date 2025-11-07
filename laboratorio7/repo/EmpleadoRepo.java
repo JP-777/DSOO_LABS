@@ -4,9 +4,6 @@ import DSOO_LABS.laboratorio7.model.Empleado;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Repositorio para empleados del banco.
- */
 public class EmpleadoRepo {
     private List<Empleado> listaEmpleados;
 

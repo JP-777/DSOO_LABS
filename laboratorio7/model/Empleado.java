@@ -1,8 +1,5 @@
 package DSOO_LABS.laboratorio7.model;
 
-/**
- * Representa a un empleado del banco, encargado de registrar operaciones.
- */
 public class Empleado extends Persona {
     private String idEmpleado;
     private String cargo;

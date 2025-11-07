@@ -3,14 +3,10 @@ package DSOO_LABS.laboratorio7.model;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Representa a un cliente del banco.
- * Hereda de Persona y puede tener varias cuentas.
- */
 public class Cliente extends Persona {
     private String idCliente;
     private String correo;
-    private String estado; // activo / inactivo
+    private String estado; 
     private List<Cuenta> cuentas;
 
     public Cliente(String idCliente, String dni, String nombre, String apellido, String direccion, String telefono, String correo, String estado) {

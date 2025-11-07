@@ -4,12 +4,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Representa una cuenta bancaria, con saldo y transacciones.
- */
 public class Cuenta {
     private String numeroCuenta;
-    private String tipoCuenta; // Ahorros, Corriente, etc.
+    private String tipoCuenta;
     private double saldo;
     private LocalDate fechaApertura;
     private List<Transaccion> transacciones;

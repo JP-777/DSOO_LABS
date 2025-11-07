@@ -2,9 +2,6 @@ package DSOO_LABS.laboratorio7.model;
 
 import java.time.LocalDateTime;
 
-/**
- * Representa un depósito en una cuenta bancaria.
- */
 public class Deposito extends Transaccion {
 
     public Deposito(String idTransaccion, LocalDateTime fecha, double monto, Empleado empleado, Cuenta cuenta) {

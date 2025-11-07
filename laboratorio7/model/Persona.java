@@ -1,10 +1,5 @@
 package DSOO_LABS.laboratorio7.model;
 
-
-/**
- * Clase base que representa a una persona del sistema bancario.
- * Se utiliza como superclase para Cliente y Empleado.
- */
 public class Persona {
     protected String dni;
     protected String nombre;
