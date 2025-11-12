@@ -2,6 +2,7 @@ package DSOO_LABS.laboratorio7.repo;
 
 import DSOO_LABS.laboratorio7.model.Cliente;
 import DSOO_LABS.laboratorio7.model.Cuenta;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +12,8 @@ public class ClienteRepo {
     public ClienteRepo() {
         this.listaClientes = new ArrayList<>();
 
-        listaClientes.add(new Cliente("C001", "12345678", "Ana", "López", "Av. Grau 123", "987654321", "ana@mail.com", "Activo"));
-        listaClientes.add(new Cliente("C002", "87654321", "Luis", "Pérez", "Calle Lima 456", "999888777", "luis@mail.com", "Activo"));
+        listaClientes.add(new Cliente("C001", "12345678", "kevin", "Peralta", "Av. Grau 123", "987654321", "kperaltal@unsa.edu.pe", "Activo"));
+        listaClientes.add(new Cliente("C002", "87654321", "Stiph", "Sanchez", "Calle Lima 456", "999888777", "Bsanchezja@unsa.edu.pe", "Activo"));
     }
 
     public void agregarCliente(Cliente c) {

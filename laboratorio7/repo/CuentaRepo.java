@@ -11,8 +11,8 @@ public class CuentaRepo {
     public CuentaRepo() {
         this.listaCuentas = new ArrayList<>();
 
-        listaCuentas.add(new Cuenta("1001", "Ahorros", 1500.00, LocalDate.of(2024, 1, 10)));
-        listaCuentas.add(new Cuenta("1002", "Corriente", 2500.00, LocalDate.of(2024, 3, 5)));
+        listaCuentas.add(new Cuenta("1001", "Ahorros", 15000.00, LocalDate.of(2024, 1, 10)));
+        listaCuentas.add(new Cuenta("1002", "Corriente", 25000.00, LocalDate.of(2024, 3, 5)));
     }
 
     public void agregarCuenta(Cuenta c) {
