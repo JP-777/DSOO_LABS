@@ -10,8 +10,13 @@ public class CuentaRepo {
 
     public CuentaRepo() {
         this.listaCuentas = new ArrayList<>();
-        listaCuentas.add(new Cuenta("1001", "Ahorros", 1500));
-        listaCuentas.add(new Cuenta("1002", "Corriente", 2300));
+        // Cuentas con montos variados y realistas
+        listaCuentas.add(new Cuenta("1001", "Ahorros", 2500.00));
+        listaCuentas.add(new Cuenta("1002", "Corriente", 15000.00));
+        listaCuentas.add(new Cuenta("1003", "Ahorros", 50000.00));
+        listaCuentas.add(new Cuenta("1004", "Inversión", 250000.00));
+        listaCuentas.add(new Cuenta("1005", "Corriente", 85000.00));
+        listaCuentas.add(new Cuenta("1006", "Ahorros", 12000.00));
     }
 
     public void agregarCuenta(Cuenta c) {

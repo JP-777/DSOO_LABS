@@ -9,8 +9,23 @@ public class EmpleadoRepo {
 
     public EmpleadoRepo() {
         this.listaEmpleados = new ArrayList<>();
-        listaEmpleados.add(new Empleado("E001", "12345678", "Carlos", "Vega", "Av. San Martín 345", "999111222", "Cajero"));
-        listaEmpleados.add(new Empleado("E002", "87654321", "Marta", "Soto", "Jr. Colón 789", "988777666", "Asistente"));
+        // Miembros del grupo como empleados
+        listaEmpleados.add(new Empleado("E001", "74123456", "Jordan", "Paredes Saico", 
+            "Av. Independencia 234, Arequipa", "987123456", "Administrador General"));
+        
+        listaEmpleados.add(new Empleado("E002", "73234567", "Kevin", "Peralta Llasa", 
+            "Calle Peral 567, Cayma", "965432178", "Gerente de Operaciones"));
+        
+        listaEmpleados.add(new Empleado("E003", "72345678", "Elkin Eder Brais", "Ramos Ochochoque", 
+            "Jr. San Juan 890, Yanahuara", "954321876", "Supervisor de Cuentas"));
+        
+        listaEmpleados.add(new Empleado("E004", "71456789", "Fernando Rafael", "Solsol Choque", 
+            "Av. Ejército 345, Cercado", "943218765", "Jefe de Atención al Cliente"));
+        
+        listaEmpleados.add(new Empleado("E005", "70567890", "Brayan Stiph", "Sanchez Jacobo", 
+            "Calle Bolognesi 678, Miraflores", "932187654", "Administrador de Sistemas"));
+        
+        System.out.println("✓ Empleados inicializados: " + listaEmpleados.size() + " registros");
     }
 
     public void agregarEmpleado(Empleado e) {
@@ -19,11 +34,14 @@ public class EmpleadoRepo {
 
     public void listarEmpleados() {
         if (listaEmpleados.isEmpty()) {
-            System.out.println("No hay empleados registrados.");
+            System.out.println("ℹ No hay empleados registrados.");
         } else {
-            System.out.println("Lista de empleados:");
+            System.out.println("\n╔════════════════════════════════════════════════════════╗");
+            System.out.println("║                  LISTA DE EMPLEADOS                    ║");
+            System.out.println("╚════════════════════════════════════════════════════════╝");
             for (Empleado e : listaEmpleados) {
                 System.out.println(e);
+                System.out.println("───────────────────────────────────────────────────────");
             }
         }
     }
@@ -41,9 +59,9 @@ public class EmpleadoRepo {
         Empleado e = buscarPorId(id);
         if (e != null) {
             listaEmpleados.remove(e);
-            System.out.println("Empleado eliminado correctamente.");
+            System.out.println("✓ Empleado eliminado correctamente: " + e.getNombre() + " " + e.getApellido());
         } else {
-            System.out.println("Empleado no encontrado.");
+            System.out.println("❌ Empleado no encontrado con ID: " + id);
         }
     }
 
@@ -51,4 +69,3 @@ public class EmpleadoRepo {
         return listaEmpleados;
     }
 }
-

@@ -1,44 +1,32 @@
 package DSOO_LABS.laboratorio7.model;
 
-import java.util.ArrayList;
-import java.util.List;
+public class UsuarioCliente extends Usuario {
+    private Cliente cliente;
 
-public class Cliente extends Persona {
-    private String idCliente;
-    private String correo;
-    private String estado;
-    private List<Cuenta> cuentas;
-
-    public Cliente(String idCliente, String dni, String nombre, String apellido, String direccion, String telefono, String correo, String estado) {
-        super(dni, nombre, apellido, direccion, telefono);
-        this.idCliente = idCliente;
-        this.correo = correo;
-        this.estado = estado;
-        this.cuentas = new ArrayList<>();
+    public UsuarioCliente(String nombreUsuario, String contrasena, Cliente cliente) {
+        super(nombreUsuario, contrasena, "CLIENTE");
+        this.cliente = cliente;
     }
 
-    public String getIdCliente() {
-        return idCliente;
+    public Cliente getCliente() {
+        return cliente;
     }
 
-    public String getCorreo() {
-        return correo;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public List<Cuenta> getCuentas() {
-        return cuentas;
-    }
-
-    public void agregarCuenta(Cuenta c) {
-        cuentas.add(c);
+    @Override
+    public void mostrarPermisos() {
+        System.out.println("\n=== PERMISOS DE USUARIO CLIENTE ===");
+        System.out.println("✓ Consultar saldo");
+        System.out.println("✓ Realizar depósitos");
+        System.out.println("✓ Realizar retiros");
+        System.out.println("✓ Ver movimientos de sus cuentas");
+        System.out.println("✗ No puede gestionar clientes");
+        System.out.println("✗ No puede gestionar empleados");
+        System.out.println("✗ No puede gestionar cuentas de otros");
+        System.out.println("=====================================");
     }
 
     @Override
     public String toString() {
-        return "Cliente [ID: " + idCliente + ", Nombre: " + nombre + " " + apellido + ", DNI: " + dni + ", Correo: " + correo + ", Estado: " + estado + "]";
+        return "Usuario Cliente: " + nombreUsuario + " | Cliente: " + cliente.getNombre() + " " + cliente.getApellido();
     }
 }
