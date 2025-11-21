@@ -4,6 +4,6 @@ import DSOO_LABS.laboratorio7.model.Retiro;
 
 public class RetiroRepo extends TransaccionRepo {
     public void registrarRetiro(Retiro r) {
-        super.registrarTransaccion(r);
+        super.agregarTransaccion(r);
     }
 }
