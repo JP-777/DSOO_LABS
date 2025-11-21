@@ -3,10 +3,6 @@ package DSOO_LABS.laboratorio7.service;
 import DSOO_LABS.laboratorio7.model.*;
 import DSOO_LABS.laboratorio7.repo.*;
 
-package service;
-
-import model.*;
-import repo.*;
 import java.util.List;
 
 public class BancoService {
