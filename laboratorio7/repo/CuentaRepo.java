@@ -10,27 +10,41 @@ public class CuentaRepo {
 
     public CuentaRepo() {
         this.listaCuentas = new ArrayList<>();
-
-        listaCuentas.add(new Cuenta("1001", "Ahorros", 15000.00, LocalDate.of(2024, 1, 10)));
-        listaCuentas.add(new Cuenta("1002", "Corriente", 25000.00, LocalDate.of(2024, 3, 5)));
+        listaCuentas.add(new Cuenta("1001", "Ahorros", 1500));
+        listaCuentas.add(new Cuenta("1002", "Corriente", 2300));
     }
 
     public void agregarCuenta(Cuenta c) {
         listaCuentas.add(c);
     }
 
-    public Cuenta buscarPorNumero(String numeroCuenta) {
+    public void listarCuentas() {
+        if (listaCuentas.isEmpty()) {
+            System.out.println("No hay cuentas registradas.");
+        } else {
+            System.out.println("Lista de cuentas:");
+            for (Cuenta c : listaCuentas) {
+                System.out.println("Número: " + c.getNumeroCuenta() + " | Tipo: " + c.getTipoCuenta() + " | Saldo: S/ " + c.getSaldo());
+            }
+        }
+    }
+
+    public Cuenta buscarPorNumero(String numero) {
         for (Cuenta c : listaCuentas) {
-            if (c.getNumeroCuenta().equalsIgnoreCase(numeroCuenta)) return c;
+            if (c.getNumeroCuenta().equalsIgnoreCase(numero)) {
+                return c;
+            }
         }
         return null;
     }
 
-    public void listarCuentas() {
-        System.out.println("=== LISTA DE CUENTAS ===");
-        for (Cuenta c : listaCuentas) {
-            c.mostrarDatos();
-            System.out.println("----------------------------");
+    public void eliminarCuenta(String numero) {
+        Cuenta c = buscarPorNumero(numero);
+        if (c != null) {
+            listaCuentas.remove(c);
+            System.out.println("Cuenta eliminada correctamente.");
+        } else {
+            System.out.println("No se encontró la cuenta.");
         }
     }
 

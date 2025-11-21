@@ -11,22 +11,22 @@ public class TransaccionRepo {
         this.listaTransacciones = new ArrayList<>();
     }
 
-    public void registrarTransaccion(Transaccion t) {
+    public void agregarTransaccion(Transaccion t) {
         listaTransacciones.add(t);
-    }
-
-    public List<Transaccion> getListaTransacciones() {
-        return listaTransacciones;
     }
 
     public void listarTransacciones() {
         if (listaTransacciones.isEmpty()) {
             System.out.println("No hay transacciones registradas.");
         } else {
-            System.out.println("=== LISTA DE TRANSACCIONES ===");
+            System.out.println("Lista de transacciones:");
             for (Transaccion t : listaTransacciones) {
                 System.out.println(t);
             }
         }
+    }
+
+    public List<Transaccion> getListaTransacciones() {
+        return listaTransacciones;
     }
 }

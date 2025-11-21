@@ -1,37 +1,51 @@
 package DSOO_LABS.laboratorio7.repo;
 
 import DSOO_LABS.laboratorio7.model.Cliente;
-import DSOO_LABS.laboratorio7.model.Cuenta;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class ClienteRepo {
     private List<Cliente> listaClientes;
 
     public ClienteRepo() {
         this.listaClientes = new ArrayList<>();
-
-        listaClientes.add(new Cliente("C001", "12345678", "kevin", "Peralta", "Av. Grau 123", "987654321", "kperaltal@unsa.edu.pe", "Activo"));
-        listaClientes.add(new Cliente("C002", "87654321", "Stiph", "Sanchez", "Calle Lima 456", "999888777", "Bsanchezja@unsa.edu.pe", "Activo"));
+        listaClientes.add(new Cliente("C001", "74859632", "Ana", "López", "Av. Grau 123", "987654321", "ana@mail.com", "Activo"));
+        listaClientes.add(new Cliente("C002", "73524168", "Luis", "Pérez", "Calle Lima 456", "912345678", "luis@mail.com", "Activo"));
     }
 
     public void agregarCliente(Cliente c) {
         listaClientes.add(c);
     }
 
-    public Cliente buscarPorId(String idCliente) {
+    public void listarClientes() {
+        if (listaClientes.isEmpty()) {
+            System.out.println("No hay clientes registrados.");
+        } else {
+            System.out.println("Lista de clientes:");
+            for (Cliente c : listaClientes) {
+                System.out.println(c);
+            }
+        }
+    }
+
+    public Cliente buscarPorId(String id) {
         for (Cliente c : listaClientes) {
-            if (c.getIdCliente().equalsIgnoreCase(idCliente)) return c;
+            if (c.getIdCliente().equalsIgnoreCase(id)) {
+                return c;
+            }
         }
         return null;
     }
 
-    public void listarClientes() {
-        System.out.println("=== LISTA DE CLIENTES ===");
-        for (Cliente c : listaClientes) {
-            c.mostrarDatos();
-            System.out.println("----------------------------");
+    public void eliminarCliente(String id) {
+        Cliente cliente = buscarPorId(id);
+        if (cliente != null) {
+            listaClientes.remove(cliente);
+            System.out.println("Cliente eliminado correctamente.");
+        } else {
+            System.out.println("No se encontró el cliente con ID: " + id);
         }
     }
 
@@ -39,3 +53,4 @@ public class ClienteRepo {
         return listaClientes;
     }
 }
+
