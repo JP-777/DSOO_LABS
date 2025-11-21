@@ -10,12 +10,16 @@ public class Empleado extends Persona {
         this.cargo = cargo;
     }
 
-    public String getIdEmpleado() { return idEmpleado; }
-    public String getCargo() { return cargo; }
+    public String getIdEmpleado() {
+        return idEmpleado;
+    }
 
-    public void mostrarDatos() {
-        super.mostrarDatos();
-        System.out.println("ID Empleado: " + idEmpleado);
-        System.out.println("Cargo: " + cargo);
+    public String getCargo() {
+        return cargo;
+    }
+
+    @Override
+    public String toString() {
+        return "Empleado [ID: " + idEmpleado + ", Nombre: " + nombre + " " + apellido + ", Cargo: " + cargo + "]";
     }
 }

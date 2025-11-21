@@ -15,19 +15,40 @@ public class Persona {
         this.telefono = telefono;
     }
 
-    public String getDni() { return dni; }
-    public String getNombre() { return nombre; }
-    public String getApellido() { return apellido; }
-    public String getDireccion() { return direccion; }
-    public String getTelefono() { return telefono; }
+    public String getDni() {
+        return dni;
+    }
 
-    public void setDireccion(String direccion) { this.direccion = direccion; }
-    public void setTelefono(String telefono) { this.telefono = telefono; }
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
 
     public void mostrarDatos() {
-        System.out.println("DNI: " + dni);
-        System.out.println("Nombre: " + nombre + " " + apellido);
-        System.out.println("Dirección: " + direccion);
-        System.out.println("Teléfono: " + telefono);
+        System.out.println(toString());
+    }
+
+    @Override
+    public String toString() {
+        return nombre + " " + apellido + " | DNI: " + dni + " | Teléfono: " + telefono + " | Dirección: " + direccion;
     }
 }
