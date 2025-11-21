@@ -16,28 +16,47 @@ public class InterfazUsuario {
     }
 
     public void mostrarBienvenida() {
-        System.out.println("\n╔═══════════════════════════════════════════════════════╗");
-        System.out.println("║                                                       ║");
-        System.out.println("║          SISTEMA BANCARIO - BANCO UNSA               ║");
-        System.out.println("║                                                       ║");
-        System.out.println("║          Gestión Integral de Operaciones             ║");
-        System.out.println("║                                                       ║");
-        System.out.println("╚═══════════════════════════════════════════════════════╝\n");
+        System.out.println("\n");
+        System.out.println("████████████████████████████████████████████████████████████████████████████████");
+        System.out.println("█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█");
+        System.out.println("█                                                                              █");
+        System.out.println("█   ███████╗██╗███████╗████████╗███████╗███╗   ███╗ █████╗                    █");
+        System.out.println("█   ██╔════╝██║██╔════╝╚══██╔══╝██╔════╝████╗ ████║██╔══██╗                   █");
+        System.out.println("█   ███████╗██║███████╗   ██║   █████╗  ██╔████╔██║███████║                   █");
+        System.out.println("█   ╚════██║██║╚════██║   ██║   ██╔══╝  ██║╚██╔╝██║██╔══██║                   █");
+        System.out.println("█   ███████║██║███████║   ██║   ███████╗██║ ╚═╝ ██║██║  ██║                   █");
+        System.out.println("█   ╚══════╝╚═╝╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝                   █");
+        System.out.println("█                                                                              █");
+        System.out.println("█   ██████╗  █████╗ ███╗   ██╗ ██████╗ █████╗ ██████╗ ██╗ ██████╗            █");
+        System.out.println("█   ██╔══██╗██╔══██╗████╗  ██║██╔════╝██╔══██╗██╔══██╗██║██╔═══██╗           █");
+        System.out.println("█   ██████╔╝███████║██╔██╗ ██║██║     ███████║██████╔╝██║██║   ██║           █");
+        System.out.println("█   ██╔══██╗██╔══██║██║╚██╗██║██║     ██╔══██║██╔══██╗██║██║   ██║           █");
+        System.out.println("█   ██████╔╝██║  ██║██║ ╚████║╚██████╗██║  ██║██║  ██║██║╚██████╔╝           █");
+        System.out.println("█   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝ ╚═════╝            █");
+        System.out.println("█                                                                              █");
+        System.out.println("█                          ■ BANCO UNSA ■                                     █");
+        System.out.println("█                  Gestión Integral de Operaciones                            █");
+        System.out.println("█                                                                              █");
+        System.out.println("█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█");
+        System.out.println("████████████████████████████████████████████████████████████████████████████████");
+        System.out.println("\n");
     }
 
     public boolean realizarLogin() {
-        System.out.println("═══════════════════════════════════════════════════════");
-        System.out.println("                    INICIO DE SESIÓN                   ");
-        System.out.println("═══════════════════════════════════════════════════════\n");
+        System.out.println("████████████████████████████████████████████████████████████████████████████████");
+        System.out.println("█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█");
+        System.out.println("█                         INICIO DE SESIÓN                                     █");
+        System.out.println("█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█");
+        System.out.println("████████████████████████████████████████████████████████████████████████████████\n");
         
         int intentos = 0;
         int maxIntentos = 3;
 
         while (intentos < maxIntentos) {
-            System.out.print("Usuario: ");
+            System.out.print("■ Usuario: ");
             String usuario = sc.nextLine().trim();
             
-            System.out.print("Contraseña: ");
+            System.out.print("■ Contraseña: ");
             String contrasena = sc.nextLine().trim();
 
             usuarioActual = gestorClinica.login(usuario, contrasena);
@@ -70,11 +89,13 @@ public class InterfazUsuario {
     public void mostrarMenu() {
         String tipo = usuarioActual.getTipo();
         
-        System.out.println("\n╔═══════════════════════════════════════════════════════╗");
-        System.out.println("║              SISTEMA BANCARIO - MENÚ PRINCIPAL        ║");
-        System.out.println("║  Usuario: " + String.format("%-43s", usuarioActual.getNombreUsuario()) + "║");
-        System.out.println("║  Rol: " + String.format("%-47s", tipo) + "║");
-        System.out.println("╚═══════════════════════════════════════════════════════╝");
+        System.out.println("\n████████████████████████████████████████████████████████████████████████████████");
+        System.out.println("█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█");
+        System.out.println("█              SISTEMA BANCARIO - MENÚ PRINCIPAL                               █");
+        System.out.println("█  ■ Usuario: " + String.format("%-63s", usuarioActual.getNombreUsuario()) + "█");
+        System.out.println("█  ■ Rol: " + String.format("%-67s", tipo) + "█");
+        System.out.println("█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█");
+        System.out.println("████████████████████████████████████████████████████████████████████████████████");
 
         if (tipo.equals("ADMINISTRADOR")) {
             mostrarMenuAdministrador();
@@ -86,71 +107,71 @@ public class InterfazUsuario {
     }
 
     private void mostrarMenuAdministrador() {
-        System.out.println("\n┌───────────────────────────────────────────────────────┐");
-        System.out.println("│              MENÚ ADMINISTRADOR                       │");
-        System.out.println("├───────────────────────────────────────────────────────┤");
-        System.out.println("│  GESTIÓN DE CLIENTES                                  │");
-        System.out.println("│   1. Listar clientes                                  │");
-        System.out.println("│   2. Agregar cliente                                  │");
-        System.out.println("│   3. Buscar cliente                                   │");
-        System.out.println("│   4. Eliminar cliente                                 │");
-        System.out.println("├───────────────────────────────────────────────────────┤");
-        System.out.println("│  GESTIÓN DE EMPLEADOS                                 │");
-        System.out.println("│   5. Listar empleados                                 │");
-        System.out.println("│   6. Agregar empleado                                 │");
-        System.out.println("├───────────────────────────────────────────────────────┤");
-        System.out.println("│  GESTIÓN DE CUENTAS                                   │");
-        System.out.println("│   7. Listar cuentas                                   │");
-        System.out.println("│   8. Agregar cuenta                                   │");
-        System.out.println("│   9. Eliminar cuenta                                  │");
-        System.out.println("├───────────────────────────────────────────────────────┤");
-        System.out.println("│  OPERACIONES BANCARIAS                                │");
-        System.out.println("│  10. Consultar saldo                                  │");
-        System.out.println("│  11. Realizar depósito                                │");
-        System.out.println("│  12. Realizar retiro                                  │");
-        System.out.println("│  13. Ver movimientos                                  │");
-        System.out.println("│  14. Listar transacciones                             │");
-        System.out.println("├───────────────────────────────────────────────────────┤");
-        System.out.println("│   0. Cerrar sesión                                    │");
-        System.out.println("└───────────────────────────────────────────────────────┘");
+        System.out.println("\n▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀");
+        System.out.println("                        ■ MENÚ ADMINISTRADOR ■                                  ");
+        System.out.println("▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
+        System.out.println("  ███ GESTIÓN DE CLIENTES                                                       ");
+        System.out.println("   1. Listar clientes                                                           ");
+        System.out.println("   2. Agregar cliente                                                           ");
+        System.out.println("   3. Buscar cliente                                                            ");
+        System.out.println("   4. Eliminar cliente                                                          ");
+        System.out.println("▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
+        System.out.println("  ███ GESTIÓN DE EMPLEADOS                                                      ");
+        System.out.println("   5. Listar empleados                                                          ");
+        System.out.println("   6. Agregar empleado                                                          ");
+        System.out.println("▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
+        System.out.println("  ███ GESTIÓN DE CUENTAS                                                        ");
+        System.out.println("   7. Listar cuentas                                                            ");
+        System.out.println("   8. Agregar cuenta                                                            ");
+        System.out.println("   9. Eliminar cuenta                                                           ");
+        System.out.println("▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
+        System.out.println("  ███ OPERACIONES BANCARIAS                                                     ");
+        System.out.println("  10. Consultar saldo                                                           ");
+        System.out.println("  11. Realizar depósito                                                         ");
+        System.out.println("  12. Realizar retiro                                                           ");
+        System.out.println("  13. Ver movimientos                                                           ");
+        System.out.println("  14. Listar transacciones                                                      ");
+        System.out.println("▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
+        System.out.println("   0. Cerrar sesión                                                             ");
+        System.out.println("▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀");
     }
 
     private void mostrarMenuEmpleado() {
-        System.out.println("\n┌───────────────────────────────────────────────────────┐");
-        System.out.println("│              MENÚ EMPLEADO                            │");
-        System.out.println("├───────────────────────────────────────────────────────┤");
-        System.out.println("│  CONSULTAS                                            │");
-        System.out.println("│   1. Listar clientes                                  │");
-        System.out.println("│   3. Buscar cliente                                   │");
-        System.out.println("│   5. Listar empleados                                 │");
-        System.out.println("│   7. Listar cuentas                                   │");
-        System.out.println("├───────────────────────────────────────────────────────┤");
-        System.out.println("│  GESTIÓN DE CUENTAS                                   │");
-        System.out.println("│   8. Agregar cuenta                                   │");
-        System.out.println("├───────────────────────────────────────────────────────┤");
-        System.out.println("│  OPERACIONES BANCARIAS                                │");
-        System.out.println("│  10. Consultar saldo                                  │");
-        System.out.println("│  11. Realizar depósito                                │");
-        System.out.println("│  12. Realizar retiro                                  │");
-        System.out.println("│  13. Ver movimientos                                  │");
-        System.out.println("│  14. Listar transacciones                             │");
-        System.out.println("├───────────────────────────────────────────────────────┤");
-        System.out.println("│   0. Cerrar sesión                                    │");
-        System.out.println("└───────────────────────────────────────────────────────┘");
+        System.out.println("\n▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀");
+        System.out.println("                           ■ MENÚ EMPLEADO ■                                    ");
+        System.out.println("▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
+        System.out.println("  ███ CONSULTAS                                                                 ");
+        System.out.println("   1. Listar clientes                                                           ");
+        System.out.println("   3. Buscar cliente                                                            ");
+        System.out.println("   5. Listar empleados                                                          ");
+        System.out.println("   7. Listar cuentas                                                            ");
+        System.out.println("▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
+        System.out.println("  ███ GESTIÓN DE CUENTAS                                                        ");
+        System.out.println("   8. Agregar cuenta                                                            ");
+        System.out.println("▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
+        System.out.println("  ███ OPERACIONES BANCARIAS                                                     ");
+        System.out.println("  10. Consultar saldo                                                           ");
+        System.out.println("  11. Realizar depósito                                                         ");
+        System.out.println("  12. Realizar retiro                                                           ");
+        System.out.println("  13. Ver movimientos                                                           ");
+        System.out.println("  14. Listar transacciones                                                      ");
+        System.out.println("▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
+        System.out.println("   0. Cerrar sesión                                                             ");
+        System.out.println("▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀");
     }
 
     private void mostrarMenuCliente() {
-        System.out.println("\n┌───────────────────────────────────────────────────────┐");
-        System.out.println("│              MENÚ CLIENTE                             │");
-        System.out.println("├───────────────────────────────────────────────────────┤");
-        System.out.println("│  OPERACIONES BANCARIAS                                │");
-        System.out.println("│  10. Consultar saldo                                  │");
-        System.out.println("│  11. Realizar depósito                                │");
-        System.out.println("│  12. Realizar retiro                                  │");
-        System.out.println("│  13. Ver movimientos de cuenta                        │");
-        System.out.println("├───────────────────────────────────────────────────────┤");
-        System.out.println("│   0. Cerrar sesión                                    │");
-        System.out.println("└───────────────────────────────────────────────────────┘");
+        System.out.println("\n▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀");
+        System.out.println("                            ■ MENÚ CLIENTE ■                                    ");
+        System.out.println("▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
+        System.out.println("  ███ OPERACIONES BANCARIAS                                                     ");
+        System.out.println("  10. Consultar saldo                                                           ");
+        System.out.println("  11. Realizar depósito                                                         ");
+        System.out.println("  12. Realizar retiro                                                           ");
+        System.out.println("  13. Ver movimientos de cuenta                                                 ");
+        System.out.println("▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
+        System.out.println("   0. Cerrar sesión                                                             ");
+        System.out.println("▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀");
     }
 
     public void agregarCliente() {
