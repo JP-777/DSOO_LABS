@@ -69,7 +69,7 @@ public class InterfazUsuario {
                 return true;
             } else {
                 intentos++;
-                System.out.println("\n❌ Credenciales incorrectas.");
+                System.out.println("\n Credenciales incorrectas.");
                 System.out.println("Intentos restantes: " + (maxIntentos - intentos));
                 
                 if (intentos < maxIntentos) {
@@ -246,7 +246,7 @@ public class InterfazUsuario {
             sc.nextLine();
             bancoService.agregarCuenta(numero, tipo, saldo);
         } catch (Exception e) {
-            System.out.println("❌ Error: Ingrese un número válido");
+            System.out.println(" Error: Ingrese un número válido");
             sc.nextLine();
         }
     }
@@ -281,7 +281,7 @@ public class InterfazUsuario {
             sc.nextLine();
             bancoService.realizarDeposito(numero, monto, "E001");
         } catch (Exception e) {
-            System.out.println("❌ Error: Ingrese un número válido");
+            System.out.println(" Error: Ingrese un número válido");
             sc.nextLine();
         }
     }
@@ -296,7 +296,7 @@ public class InterfazUsuario {
             sc.nextLine();
             bancoService.realizarRetiro(numero, monto, "E001");
         } catch (Exception e) {
-            System.out.println("❌ Error: Ingrese un número válido");
+            System.out.println(" Error: Ingrese un número válido");
             sc.nextLine();
         }
     }

@@ -33,7 +33,7 @@ public class BancoService {
     // Método para verificar permisos
     private boolean tienePermiso(String accion) {
         if (usuarioActual == null) {
-            System.out.println("❌ No hay un usuario autenticado.");
+            System.out.println("No hay un usuario autenticado.");
             return false;
         }
 
@@ -69,7 +69,7 @@ public class BancoService {
     }
 
     private void mostrarErrorPermiso(String accion) {
-        System.out.println("\n❌ ACCESO DENEGADO ❌");
+        System.out.println("\n ACCESO DENEGADO ");
         System.out.println("Tu rol '" + usuarioActual.getTipo() + "' no tiene permisos para: " + accion);
         System.out.println("Contacta al administrador si necesitas acceso.\n");
     }
@@ -97,13 +97,13 @@ public class BancoService {
         }
 
         if (!Validador.validarDatosCliente(dni, nombre, apellido, direccion, telefono, correo)) {
-            System.out.println("❌ No se pudo agregar el cliente debido a errores de validación.\n");
+            System.out.println(" No se pudo agregar el cliente debido a errores de validación.\n");
             return;
         }
 
         // Verificar si el ID o DNI ya existen
         if (clienteRepo.buscarPorId(id) != null) {
-            System.out.println("❌ Ya existe un cliente con el ID: " + id);
+            System.out.println(" Ya existe un cliente con el ID: " + id);
             return;
         }
 
@@ -125,7 +125,7 @@ public class BancoService {
 
         Cliente cliente = clienteRepo.buscarPorId(id);
         if (cliente == null) {
-            System.out.println("❌ Cliente no encontrado con ID: " + id);
+            System.out.println(" Cliente no encontrado con ID: " + id);
         } else {
             System.out.println("✓ Cliente encontrado:");
             System.out.println(cliente);
@@ -168,12 +168,12 @@ public class BancoService {
         }
 
         if (!Validador.validarDatosEmpleado(dni, nombre, apellido, direccion, telefono, cargo)) {
-            System.out.println("❌ No se pudo agregar el empleado debido a errores de validación.\n");
+            System.out.println(" No se pudo agregar el empleado debido a errores de validación.\n");
             return;
         }
 
         if (empleadoRepo.buscarPorId(id) != null) {
-            System.out.println("❌ Ya existe un empleado con el ID: " + id);
+            System.out.println(" Ya existe un empleado con el ID: " + id);
             return;
         }
 
@@ -213,7 +213,7 @@ public class BancoService {
         }
 
         if (cuentaRepo.buscarPorNumero(numero) != null) {
-            System.out.println("❌ Ya existe una cuenta con ese número: " + numero);
+            System.out.println(" Ya existe una cuenta con ese número: " + numero);
             return;
         }
 
@@ -249,7 +249,7 @@ public class BancoService {
 
         Cuenta cuenta = cuentaRepo.buscarPorNumero(numeroCuenta);
         if (cuenta == null) {
-            System.out.println("❌ No existe una cuenta con ese número: " + numeroCuenta);
+            System.out.println(" No existe una cuenta con ese número: " + numeroCuenta);
             return;
         }
 
@@ -261,7 +261,7 @@ public class BancoService {
             );
             
             if (!cuentasCliente.contains(cuenta)) {
-                System.out.println("❌ No tienes permiso para consultar esta cuenta.");
+                System.out.println(" No tienes permiso para consultar esta cuenta.");
                 return;
             }
         }
@@ -289,13 +289,13 @@ public class BancoService {
 
         Cuenta cuenta = cuentaRepo.buscarPorNumero(numeroCuenta);
         if (cuenta == null) {
-            System.out.println("❌ No se encontró la cuenta: " + numeroCuenta);
+            System.out.println(" No se encontró la cuenta: " + numeroCuenta);
             return;
         }
 
         Empleado empleado = empleadoRepo.buscarPorId(idEmpleado);
         if (empleado == null) {
-            System.out.println("❌ Empleado no encontrado: " + idEmpleado);
+            System.out.println(" Empleado no encontrado: " + idEmpleado);
             return;
         }
 
@@ -326,12 +326,12 @@ public class BancoService {
 
         Cuenta cuenta = cuentaRepo.buscarPorNumero(numeroCuenta);
         if (cuenta == null) {
-            System.out.println("❌ No se encontró la cuenta: " + numeroCuenta);
+            System.out.println(" No se encontró la cuenta: " + numeroCuenta);
             return;
         }
 
         if (!Validador.validarSaldoSuficiente(cuenta.getSaldo(), monto)) {
-            System.out.println("❌ Saldo insuficiente para realizar el retiro.");
+            System.out.println(" Saldo insuficiente para realizar el retiro.");
             System.out.println("  Saldo actual: S/ " + String.format("%.2f", cuenta.getSaldo()));
             System.out.println("  Monto solicitado: S/ " + String.format("%.2f", monto));
             return;
@@ -339,7 +339,7 @@ public class BancoService {
 
         Empleado empleado = empleadoRepo.buscarPorId(idEmpleado);
         if (empleado == null) {
-            System.out.println("❌ Empleado no encontrado: " + idEmpleado);
+            System.out.println(" Empleado no encontrado: " + idEmpleado);
             return;
         }
 
@@ -365,7 +365,7 @@ public class BancoService {
 
         Cuenta cuenta = cuentaRepo.buscarPorNumero(numeroCuenta);
         if (cuenta == null) {
-            System.out.println("❌ Cuenta no encontrada: " + numeroCuenta);
+            System.out.println(" Cuenta no encontrada: " + numeroCuenta);
             return;
         }
 
@@ -377,7 +377,7 @@ public class BancoService {
             );
             
             if (!cuentasCliente.contains(cuenta)) {
-                System.out.println("❌ No tienes permiso para ver los movimientos de esta cuenta.");
+                System.out.println(" No tienes permiso para ver los movimientos de esta cuenta.");
                 return;
             }
         }
