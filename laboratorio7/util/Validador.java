@@ -72,7 +72,7 @@ public class Validador {
 
     // Método para mostrar mensaje de error de validación
     public static void mostrarErrorValidacion(String campo, String razon) {
-        System.out.println("❌ Error de validación en '" + campo + "': " + razon);
+        System.out.println(" Error de validación en '" + campo + "': " + razon);
     }
 
     // Validación completa de cliente
