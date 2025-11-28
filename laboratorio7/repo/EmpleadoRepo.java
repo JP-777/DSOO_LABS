@@ -59,9 +59,9 @@ public class EmpleadoRepo {
         Empleado e = buscarPorId(id);
         if (e != null) {
             listaEmpleados.remove(e);
-            System.out.println("✓ Empleado eliminado correctamente: " + e.getNombre() + " " + e.getApellido());
+            System.out.println(" ✓ Empleado eliminado correctamente: " + e.getNombre() + " " + e.getApellido());
         } else {
-            System.out.println("❌ Empleado no encontrado con ID: " + id);
+            System.out.println(" X Empleado no encontrado con ID: " + id);
         }
     }
 

@@ -61,9 +61,9 @@ public class ClienteRepo {
         Cliente cliente = buscarPorId(id);
         if (cliente != null) {
             listaClientes.remove(cliente);
-            System.out.println("✓ Cliente eliminado correctamente: " + cliente.getNombre() + " " + cliente.getApellido());
+            System.out.println(" ✓ Cliente eliminado correctamente: " + cliente.getNombre() + " " + cliente.getApellido());
         } else {
-            System.out.println("❌ No se encontró el cliente con ID: " + id);
+            System.out.println(" X No se encontró el cliente con ID: " + id);
         }
     }
 

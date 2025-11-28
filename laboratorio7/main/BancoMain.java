@@ -86,23 +86,23 @@ public class BancoMain {
                             interfaz.pausar();
                             break;
                         case 0:
-                            System.out.println("\n⟳ Cerrando sesión...");
+                            System.out.println("\n ⟳ Cerrando sesión...");
                             break;
                         default:
-                            System.out.println("❌ Opción no válida. Intente nuevamente.");
+                            System.out.println(" X Opción no válida. Intente nuevamente.");
                     }
                     
                 } catch (Exception e) {
-                    System.out.println("❌ Error: Ingrese un número válido");
+                    System.out.println(" X Error: Ingrese un número válido");
                     sc.nextLine();
                     opcion = -1;
                 }
 
             } while (opcion != 0);
             
-            System.out.println("\n✓ Sesión cerrada. ¡Hasta pronto!");
+            System.out.println("\n ✓ Sesión cerrada. ¡Hasta pronto!");
         } else {
-            System.out.println("\n❌ No se pudo iniciar sesión. Cerrando sistema...");
+            System.out.println("\n X No se pudo iniciar sesión. Cerrando sistema...");
         }
 
         sc.close();
