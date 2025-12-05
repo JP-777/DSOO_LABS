@@ -8,15 +8,17 @@ public class MessageDialog {
     public static void showSuccessDialog(Component parent, String message) {
         JOptionPane.showMessageDialog(parent,
             message,
+            
             "Éxito",
             JOptionPane.INFORMATION_MESSAGE);
     }
-    
+    // void
     public static void showErrorDialog(Component parent, String message) {
         JOptionPane.showMessageDialog(parent,
             message,
             "Error",
             JOptionPane.ERROR_MESSAGE);
+
     }
     
     public static void showWarningDialog(Component parent, String message) {
@@ -24,6 +26,7 @@ public class MessageDialog {
             message,
             "Advertencia",
             JOptionPane.WARNING_MESSAGE);
+
     }
     
     public static boolean showConfirmDialog(Component parent, String message) {
@@ -32,6 +35,7 @@ public class MessageDialog {
             "Confirmar",
             JOptionPane.YES_NO_OPTION,
             JOptionPane.QUESTION_MESSAGE);
+
         
         return response == JOptionPane.YES_OPTION;
     }
