@@ -1,4 +1,4 @@
-package BancoGUI;
+package DSOO_LABS.laboratorio7.BancoGUI;
 
 import DSOO_LABS.laboratorio7.service.BancoService;
 import DSOO_LABS.laboratorio7.service.GestorClinica;
@@ -7,93 +7,61 @@ import javax.swing.*;
 import java.awt.*;
 
 public class LoginFrame extends JFrame {
-    private JTextField txtUsuario;
-    private JPasswordField txtContrasena;
     private BancoService bancoService;
     private GestorClinica gestorClinica;
+    private JTextField txtUsuario;
+    private JPasswordField txtPassword;
     
     public LoginFrame() {
         bancoService = new BancoService();
         gestorClinica = new GestorClinica(
-            bancoService.getClienteRepo(),
-            bancoService.getEmpleadoRepo()
+            bancoService.getClienteDAO(),
+            bancoService.getEmpleadoDAO()
         );
         
-        initComponents();
-        setupFrame();
-    }
-    
-    private void setupFrame() {
-        setTitle("Sistema Bancario - Login");
+        setTitle("Login - Sistema Bancario");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(350, 200);
+        setSize(400, 300);
         setLocationRelativeTo(null);
-    }
-    
-    private void initComponents() {
+        
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(10, 10, 10, 10);
         
-        // Usuario
         gbc.gridx = 0; gbc.gridy = 0;
         panel.add(new JLabel("Usuario:"), gbc);
         
-        gbc.gridx = 1; gbc.gridy = 0;
+        gbc.gridx = 1;
         txtUsuario = new JTextField(15);
         panel.add(txtUsuario, gbc);
         
-        // Contraseña
         gbc.gridx = 0; gbc.gridy = 1;
         panel.add(new JLabel("Contraseña:"), gbc);
         
-        gbc.gridx = 1; gbc.gridy = 1;
-        txtContrasena = new JPasswordField(15);
-        panel.add(txtContrasena, gbc);
+        gbc.gridx = 1;
+        txtPassword = new JPasswordField(15);
+        panel.add(txtPassword, gbc);
         
-        // Botones
-        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
-        JPanel btnPanel = new JPanel(new FlowLayout());
-        
-        JButton btnLogin = new JButton("Iniciar Sesión");
+        gbc.gridx = 0; gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        JButton btnLogin = new JButton("Ingresar");
         btnLogin.addActionListener(e -> realizarLogin());
-        
-        JButton btnSalir = new JButton("Salir");
-        btnSalir.addActionListener(e -> System.exit(0));
-        
-        btnPanel.add(btnLogin);
-        btnPanel.add(btnSalir);
-        panel.add(btnPanel, gbc);
-        
-        // Info usuarios
-        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
-        JLabel lblInfo = new JLabel("Prueba con: jordan.paredes / admin123", JLabel.CENTER);
-        lblInfo.setFont(new Font("Arial", Font.ITALIC, 10));
-        panel.add(lblInfo, gbc);
+        panel.add(btnLogin, gbc);
         
         add(panel);
     }
     
     private void realizarLogin() {
         String usuario = txtUsuario.getText().trim();
-        String contrasena = new String(txtContrasena.getPassword());
+        String password = new String(txtPassword.getPassword()).trim();
         
-        if (usuario.isEmpty() || contrasena.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Complete todos los campos");
-            return;
-        }
+        Usuario usuarioAutenticado = gestorClinica.login(usuario, password);
         
-        Usuario user = gestorClinica.login(usuario, contrasena);
-        
-        if (user != null) {
-            bancoService.setUsuarioActual(user);
-            JOptionPane.showMessageDialog(this, 
-                "Bienvenido: " + user.getNombreUsuario() + 
-                "\nRol: " + user.getTipo());
-            
-            this.dispose();
-            new MainFrame(bancoService).setVisible(true);
+        if (usuarioAutenticado != null) {
+            bancoService.setUsuarioActual(usuarioAutenticado);
+            MainFrame mainFrame = new MainFrame(bancoService);
+            mainFrame.setVisible(true);
+            dispose();
         } else {
             JOptionPane.showMessageDialog(this, "Credenciales incorrectas");
         }

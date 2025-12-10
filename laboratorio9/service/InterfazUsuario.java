@@ -1,7 +1,10 @@
 package DSOO_LABS.laboratorio7.service;
 
 import DSOO_LABS.laboratorio7.model.Usuario;
+import DSOO_LABS.laboratorio7.model.Cliente;  
+import DSOO_LABS.laboratorio7.model.Cuenta;  
 import java.util.Scanner;
+import java.util.List;
 
 public class InterfazUsuario {
     private Scanner sc;
@@ -132,6 +135,10 @@ public class InterfazUsuario {
         System.out.println("  13. Ver movimientos                                                           ");
         System.out.println("  14. Listar transacciones                                                      ");
         System.out.println("▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
+        System.out.println("  ███ ASIGNACIONES                                                              ");
+        System.out.println("  15. Asignar cuenta a cliente                                                  ");
+        System.out.println("  16. Ver cuentas de un cliente                                                 ");
+        System.out.println("▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
         System.out.println("   0. Cerrar sesión                                                             ");
         System.out.println("▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀");
     }
@@ -142,6 +149,7 @@ public class InterfazUsuario {
         System.out.println("▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
         System.out.println("  ███ CONSULTAS                                                                 ");
         System.out.println("   1. Listar clientes                                                           ");
+        System.out.println("   2. Agregar cliente                                                           "); // ✅ YA ESTÁ
         System.out.println("   3. Buscar cliente                                                            ");
         System.out.println("   5. Listar empleados                                                          ");
         System.out.println("   7. Listar cuentas                                                            ");
@@ -155,6 +163,10 @@ public class InterfazUsuario {
         System.out.println("  12. Realizar retiro                                                           ");
         System.out.println("  13. Ver movimientos                                                           ");
         System.out.println("  14. Listar transacciones                                                      ");
+        System.out.println("▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
+        System.out.println("  ███ ASIGNACIONES                                                              ");
+        System.out.println("  15. Asignar cuenta a cliente                                                  ");
+        System.out.println("  16. Ver cuentas de un cliente                                                 ");
         System.out.println("▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄");
         System.out.println("   0. Cerrar sesión                                                             ");
         System.out.println("▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀");
@@ -311,5 +323,28 @@ public class InterfazUsuario {
     public void pausar() {
         System.out.print("\nPresione ENTER para continuar...");
         sc.nextLine();
+    }
+    
+    // ========== NUEVOS MÉTODOS ==========
+    
+    public void asignarCuentaACliente() {
+        System.out.println("\n=== ASIGNAR CUENTA A CLIENTE ===");
+        
+        System.out.print("ID del cliente (ej: C001): ");
+        String idCliente = sc.nextLine().trim();
+        
+        System.out.print("Número de cuenta (ej: 1001): ");
+        String numeroCuenta = sc.nextLine().trim();
+        
+        // Llamar al servicio
+        bancoService.asignarCuentaACliente(idCliente, numeroCuenta);
+    }
+    
+    public void verCuentasDeCliente() {
+        System.out.println("\n=== VER CUENTAS DE UN CLIENTE ===");
+        System.out.print("ID del cliente: ");
+        String idCliente = sc.nextLine().trim();
+        
+        bancoService.mostrarCuentasDeCliente(idCliente);
     }
 }

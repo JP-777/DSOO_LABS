@@ -11,6 +11,16 @@ public class Cuenta {
     private LocalDate fechaApertura;
     private List<Transaccion> transacciones;
 
+    // Constructor VACÍO para JDBC
+    public Cuenta() {
+        this.numeroCuenta = "";
+        this.tipoCuenta = "";
+        this.saldo = 0.0;
+        this.fechaApertura = LocalDate.now();
+        this.transacciones = new ArrayList<>();
+    }
+    
+    // Constructor con parámetros
     public Cuenta(String numeroCuenta, String tipoCuenta, double saldo) {
         this.numeroCuenta = numeroCuenta;
         this.tipoCuenta = tipoCuenta;
@@ -19,6 +29,7 @@ public class Cuenta {
         this.transacciones = new ArrayList<>();
     }
 
+    // Los demás métodos se mantienen igual...
     public String getNumeroCuenta() {
         return numeroCuenta;
     }

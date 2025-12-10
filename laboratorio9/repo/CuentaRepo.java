@@ -25,12 +25,15 @@ public class CuentaRepo {
 
     public void listarCuentas() {
         if (listaCuentas.isEmpty()) {
-            System.out.println("No hay cuentas registradas.");
+            System.out.println("ℹ No hay cuentas registradas.");
         } else {
-            System.out.println("Lista de cuentas:");
+            System.out.println("\n=== LISTA DE CUENTAS ===");
             for (Cuenta c : listaCuentas) {
-                System.out.println("Número: " + c.getNumeroCuenta() + " | Tipo: " + c.getTipoCuenta() + " | Saldo: S/ " + c.getSaldo());
+                System.out.println("Número: " + c.getNumeroCuenta() + 
+                                 " | Tipo: " + c.getTipoCuenta() + 
+                                 " | Saldo: S/ " + String.format("%.2f", c.getSaldo()));
             }
+            System.out.println("=========================\n");
         }
     }
 
@@ -47,9 +50,9 @@ public class CuentaRepo {
         Cuenta c = buscarPorNumero(numero);
         if (c != null) {
             listaCuentas.remove(c);
-            System.out.println("Cuenta eliminada correctamente.");
+            System.out.println("✓ Cuenta eliminada correctamente: " + numero);
         } else {
-            System.out.println("No se encontró la cuenta.");
+            System.out.println("❌ No se encontró la cuenta: " + numero);
         }
     }
 

@@ -6,6 +6,15 @@ public class Usuario {
     protected String estado;
     protected String tipo; // "CLIENTE", "EMPLEADO", "ADMINISTRADOR"
 
+    // Constructor vacío para JDBC
+    public Usuario() {
+        this.nombreUsuario = "";
+        this.contrasena = "";
+        this.estado = "Activo";
+        this.tipo = "";
+    }
+    
+    // Constructor con parámetros (el que ya tienes)
     public Usuario(String nombreUsuario, String contrasena, String tipo) {
         this.nombreUsuario = nombreUsuario;
         this.contrasena = contrasena;
@@ -13,6 +22,7 @@ public class Usuario {
         this.tipo = tipo;
     }
 
+    // Los demás métodos se mantienen igual...
     public String getNombreUsuario() {
         return nombreUsuario;
     }

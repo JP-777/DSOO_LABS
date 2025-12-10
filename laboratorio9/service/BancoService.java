@@ -1,25 +1,28 @@
 package DSOO_LABS.laboratorio7.service;
 
 import DSOO_LABS.laboratorio7.model.*;
-import DSOO_LABS.laboratorio7.repo.*;
+import DSOO_LABS.laboratorio7.dao.*;  // ¡NUEVO: Importar DAOs en lugar de repos!
 import DSOO_LABS.laboratorio7.util.Validador;
 
 import java.util.List;
 
 public class BancoService {
-    private ClienteRepo clienteRepo;
-    private EmpleadoRepo empleadoRepo;
-    private CuentaRepo cuentaRepo;
-    private TitularidadRepo titularidadRepo;
-    private TransaccionRepo transaccionRepo;
+    // NUEVO: DAOs para acceso a base de datos
+    private ClienteDAO clienteDAO;
+    private EmpleadoDAO empleadoDAO;
+    private CuentaDAO cuentaDAO;
+    private TransaccionDAO transaccionDAO;    // NUEVO
+    private TitularidadDAO titularidadDAO;    // NUEVO
+    
     private Usuario usuarioActual;
 
     public BancoService() {
-        this.clienteRepo = new ClienteRepo();
-        this.empleadoRepo = new EmpleadoRepo();
-        this.cuentaRepo = new CuentaRepo();
-        this.titularidadRepo = new TitularidadRepo(clienteRepo, cuentaRepo);
-        this.transaccionRepo = new TransaccionRepo();
+        // NUEVO: Inicializar todos los DAOs
+        this.clienteDAO = new ClienteDAO();
+        this.empleadoDAO = new EmpleadoDAO();
+        this.cuentaDAO = new CuentaDAO();
+        this.transaccionDAO = new TransaccionDAO();    // NUEVO
+        this.titularidadDAO = new TitularidadDAO();    // NUEVO
     }
 
     public void setUsuarioActual(Usuario usuario) {
@@ -30,7 +33,6 @@ public class BancoService {
         return usuarioActual;
     }
 
-    // Método para verificar permisos
     private boolean tienePermiso(String accion) {
         if (usuarioActual == null) {
             System.out.println("No hay un usuario autenticado.");
@@ -41,6 +43,8 @@ public class BancoService {
 
         switch (accion) {
             case "AGREGAR_CLIENTE":
+                return tipo.equals("ADMINISTRADOR") || tipo.equals("EMPLEADO");
+                
             case "ELIMINAR_CLIENTE":
             case "AGREGAR_EMPLEADO":
             case "ELIMINAR_EMPLEADO":
@@ -52,13 +56,15 @@ public class BancoService {
             case "AGREGAR_CUENTA":
             case "LISTAR_CUENTAS":
             case "ELIMINAR_CUENTA":
+            case "ASIGNAR_CUENTA":
+            case "VER_CUENTAS_CLIENTE":
                 return tipo.equals("ADMINISTRADOR") || tipo.equals("EMPLEADO");
                 
             case "CONSULTAR_SALDO":
             case "DEPOSITO":
             case "RETIRO":
             case "VER_MOVIMIENTOS":
-                return true; // Todos los usuarios autenticados pueden hacer estas operaciones
+                return true; // Todos los usuarios autenticados
                 
             case "LISTAR_TRANSACCIONES":
                 return tipo.equals("ADMINISTRADOR") || tipo.equals("EMPLEADO");
@@ -74,13 +80,23 @@ public class BancoService {
         System.out.println("Contacta al administrador si necesitas acceso.\n");
     }
 
-    // CLIENTES
+    // ========== CLIENTES (ACTUALIZADO para BD) ==========
     public void listarClientes() {
         if (!tienePermiso("LISTAR_CLIENTES")) {
             mostrarErrorPermiso("Listar clientes");
             return;
         }
-        clienteRepo.listarClientes();
+        
+        List<Cliente> clientes = clienteDAO.listarTodos();
+        if (clientes.isEmpty()) {
+            System.out.println("ℹ No hay clientes registrados.");
+        } else {
+            System.out.println("\n=== LISTA DE CLIENTES ===");
+            for (Cliente c : clientes) {
+                System.out.println(c);
+            }
+            System.out.println("=========================\n");
+        }
     }
 
     public void agregarCliente(String id, String dni, String nombre, String apellido, 
@@ -101,15 +117,20 @@ public class BancoService {
             return;
         }
 
-        // Verificar si el ID o DNI ya existen
-        if (clienteRepo.buscarPorId(id) != null) {
+        // Verificar si el cliente ya existe en BD
+        Cliente existente = clienteDAO.buscarPorCodigo(id);
+        if (existente != null) {
             System.out.println(" Ya existe un cliente con el ID: " + id);
             return;
         }
 
         Cliente nuevo = new Cliente(id, dni, nombre, apellido, direccion, telefono, correo, "Activo");
-        clienteRepo.agregarCliente(nuevo);
-        System.out.println("✓ Cliente agregado correctamente: " + nombre + " " + apellido);
+        boolean resultado = clienteDAO.agregarCliente(nuevo);
+        if (resultado) {
+            System.out.println("✓ Cliente agregado correctamente a BD: " + nombre + " " + apellido);
+        } else {
+            System.out.println("❌ Error al agregar cliente a BD");
+        }
     }
 
     public void buscarClientePorId(String id) {
@@ -123,12 +144,15 @@ public class BancoService {
             return;
         }
 
-        Cliente cliente = clienteRepo.buscarPorId(id);
+        // Buscar en BD usando DAO
+        Cliente cliente = clienteDAO.buscarPorCodigo(id);
         if (cliente == null) {
             System.out.println(" Cliente no encontrado con ID: " + id);
         } else {
             System.out.println("✓ Cliente encontrado:");
             System.out.println(cliente);
+            // Mostrar cuentas del cliente
+            mostrarCuentasDeCliente(id);
         }
     }
 
@@ -143,16 +167,31 @@ public class BancoService {
             return;
         }
 
-        clienteRepo.eliminarCliente(id);
+        boolean resultado = clienteDAO.eliminarCliente(id);
+        if (resultado) {
+            System.out.println("✓ Cliente eliminado correctamente de BD");
+        } else {
+            System.out.println("❌ No se pudo eliminar el cliente");
+        }
     }
 
-    // EMPLEADOS
+    // ========== EMPLEADOS (ACTUALIZADO para BD) ==========
     public void listarEmpleados() {
         if (!tienePermiso("LISTAR_EMPLEADOS")) {
             mostrarErrorPermiso("Listar empleados");
             return;
         }
-        empleadoRepo.listarEmpleados();
+        
+        List<Empleado> empleados = empleadoDAO.listarTodos();
+        if (empleados.isEmpty()) {
+            System.out.println("ℹ No hay empleados registrados.");
+        } else {
+            System.out.println("\n=== LISTA DE EMPLEADOS ===");
+            for (Empleado e : empleados) {
+                System.out.println(e);
+            }
+            System.out.println("==========================\n");
+        }
     }
 
     public void agregarEmpleado(String id, String dni, String nombre, String apellido, 
@@ -172,23 +211,39 @@ public class BancoService {
             return;
         }
 
-        if (empleadoRepo.buscarPorId(id) != null) {
+        // Verificar si el empleado ya existe en BD
+        Empleado existente = empleadoDAO.buscarPorCodigo(id);
+        if (existente != null) {
             System.out.println(" Ya existe un empleado con el ID: " + id);
             return;
         }
 
-        Empleado e = new Empleado(id, dni, nombre, apellido, direccion, telefono, cargo);
-        empleadoRepo.agregarEmpleado(e);
-        System.out.println("✓ Empleado agregado correctamente: " + nombre + " " + apellido);
+        Empleado nuevoEmpleado = new Empleado(id, dni, nombre, apellido, direccion, telefono, cargo);
+        boolean resultado = empleadoDAO.agregarEmpleado(nuevoEmpleado);
+        if (resultado) {
+            System.out.println("✓ Empleado agregado correctamente a BD: " + nombre + " " + apellido);
+        } else {
+            System.out.println("❌ Error al agregar empleado a BD");
+        }
     }
 
-    // CUENTAS
+    // ========== CUENTAS (ACTUALIZADO para BD) ==========
     public void listarCuentas() {
         if (!tienePermiso("LISTAR_CUENTAS")) {
             mostrarErrorPermiso("Listar cuentas");
             return;
         }
-        cuentaRepo.listarCuentas();
+        
+        List<Cuenta> cuentas = cuentaDAO.listarTodas();
+        if (cuentas.isEmpty()) {
+            System.out.println("ℹ No hay cuentas registradas.");
+        } else {
+            System.out.println("\n=== LISTA DE CUENTAS ===");
+            for (Cuenta c : cuentas) {
+                System.out.println(c);
+            }
+            System.out.println("========================\n");
+        }
     }
 
     public void agregarCuenta(String numero, String tipo, double saldo) {
@@ -212,14 +267,22 @@ public class BancoService {
             return;
         }
 
-        if (cuentaRepo.buscarPorNumero(numero) != null) {
+        // Verificar si la cuenta ya existe en BD
+        Cuenta existente = cuentaDAO.buscarPorNumero(numero);
+        if (existente != null) {
             System.out.println(" Ya existe una cuenta con ese número: " + numero);
             return;
         }
 
-        Cuenta c = new Cuenta(numero, tipo, saldo);
-        cuentaRepo.agregarCuenta(c);
-        System.out.println("✓ Cuenta agregada correctamente.");
+        Cuenta nuevaCuenta = new Cuenta(numero, tipo, saldo);
+        boolean resultado = cuentaDAO.agregarCuenta(nuevaCuenta);
+        if (resultado) {
+            System.out.println("✓ Cuenta agregada correctamente a BD.");
+            System.out.println("⚠ NOTA: Esta cuenta no está asignada a ningún cliente.");
+            System.out.println("   Use 'Asignar cuenta a cliente' para vincularla.");
+        } else {
+            System.out.println("❌ Error al agregar cuenta a BD");
+        }
     }
 
     public void eliminarCuenta(String numero) {
@@ -233,7 +296,12 @@ public class BancoService {
             return;
         }
 
-        cuentaRepo.eliminarCuenta(numero);
+        boolean resultado = cuentaDAO.eliminarCuenta(numero);
+        if (resultado) {
+            System.out.println("✓ Cuenta eliminada correctamente de BD");
+        } else {
+            System.out.println("❌ No se pudo eliminar la cuenta");
+        }
     }
 
     public void consultarSaldo(String numeroCuenta) {
@@ -247,20 +315,28 @@ public class BancoService {
             return;
         }
 
-        Cuenta cuenta = cuentaRepo.buscarPorNumero(numeroCuenta);
+        // Buscar cuenta en BD
+        Cuenta cuenta = cuentaDAO.buscarPorNumero(numeroCuenta);
         if (cuenta == null) {
             System.out.println(" No existe una cuenta con ese número: " + numeroCuenta);
             return;
         }
 
-        // Si es cliente, solo puede ver sus propias cuentas
+        // Si es cliente, verificar que la cuenta le pertenece
         if (usuarioActual.getTipo().equals("CLIENTE")) {
-            UsuarioCliente uc = (UsuarioCliente) usuarioActual;
-            List<Cuenta> cuentasCliente = titularidadRepo.obtenerCuentasPorCliente(
-                uc.getCliente().getIdCliente()
+            List<Cuenta> cuentasCliente = titularidadDAO.obtenerCuentasPorCliente(
+                ((UsuarioCliente) usuarioActual).getCliente().getIdCliente()
             );
             
-            if (!cuentasCliente.contains(cuenta)) {
+            boolean tieneAcceso = false;
+            for (Cuenta c : cuentasCliente) {
+                if (c.getNumeroCuenta().equals(numeroCuenta)) {
+                    tieneAcceso = true;
+                    break;
+                }
+            }
+            
+            if (!tieneAcceso) {
                 System.out.println(" No tienes permiso para consultar esta cuenta.");
                 return;
             }
@@ -270,7 +346,7 @@ public class BancoService {
                            String.format("%.2f", cuenta.getSaldo()));
     }
 
-    // TRANSACCIONES
+    // ========== TRANSACCIONES (COMPLETAMENTE ACTUALIZADO) ==========
     public void realizarDeposito(String numeroCuenta, double monto, String idEmpleado) {
         if (!tienePermiso("DEPOSITO")) {
             mostrarErrorPermiso("Realizar depósitos");
@@ -287,25 +363,48 @@ public class BancoService {
             return;
         }
 
-        Cuenta cuenta = cuentaRepo.buscarPorNumero(numeroCuenta);
+        // Buscar cuenta en BD
+        Cuenta cuenta = cuentaDAO.buscarPorNumero(numeroCuenta);
         if (cuenta == null) {
             System.out.println(" No se encontró la cuenta: " + numeroCuenta);
             return;
         }
 
-        Empleado empleado = empleadoRepo.buscarPorId(idEmpleado);
-        if (empleado == null) {
-            System.out.println(" Empleado no encontrado: " + idEmpleado);
+        // Obtener IDs para la transacción
+        int idCuenta = transaccionDAO.obtenerIdCuenta(numeroCuenta);
+        int idEmpleadoBD = transaccionDAO.obtenerIdEmpleado(idEmpleado);
+        
+        if (idCuenta == -1) {
+            System.out.println(" Error: No se pudo obtener ID de cuenta");
             return;
         }
 
-        Transaccion deposito = new Deposito("T" + System.currentTimeMillis(), monto, empleado, cuenta);
-        deposito.procesar();
-        cuenta.agregarTransaccion(deposito);
-        transaccionRepo.agregarTransaccion(deposito);
-        System.out.println("✓ Depósito de S/ " + String.format("%.2f", monto) + 
-                           " realizado correctamente.");
-        System.out.println("  Nuevo saldo: S/ " + String.format("%.2f", cuenta.getSaldo()));
+        try {
+            // 1. Actualizar saldo en cuenta
+            double nuevoSaldo = cuenta.getSaldo() + monto;
+            boolean saldoActualizado = cuentaDAO.actualizarSaldo(numeroCuenta, nuevoSaldo);
+            
+            if (!saldoActualizado) {
+                System.out.println("❌ Error al actualizar saldo");
+                return;
+            }
+            
+            // 2. Registrar transacción en BD
+            boolean transaccionRegistrada = transaccionDAO.registrarTransaccion(
+                monto, "DEPOSITO", idCuenta, idEmpleadoBD
+            );
+            
+            if (transaccionRegistrada) {
+                System.out.println("✓ Depósito de S/ " + String.format("%.2f", monto) + 
+                                 " realizado correctamente.");
+                System.out.println("  Nuevo saldo: S/ " + String.format("%.2f", nuevoSaldo));
+            } else {
+                System.out.println("❌ Error al registrar transacción");
+            }
+            
+        } catch (Exception e) {
+            System.err.println("❌ Error en depósito: " + e.getMessage());
+        }
     }
 
     public void realizarRetiro(String numeroCuenta, double monto, String idEmpleado) {
@@ -324,7 +423,8 @@ public class BancoService {
             return;
         }
 
-        Cuenta cuenta = cuentaRepo.buscarPorNumero(numeroCuenta);
+        // Buscar cuenta en BD
+        Cuenta cuenta = cuentaDAO.buscarPorNumero(numeroCuenta);
         if (cuenta == null) {
             System.out.println(" No se encontró la cuenta: " + numeroCuenta);
             return;
@@ -337,19 +437,41 @@ public class BancoService {
             return;
         }
 
-        Empleado empleado = empleadoRepo.buscarPorId(idEmpleado);
-        if (empleado == null) {
-            System.out.println(" Empleado no encontrado: " + idEmpleado);
+        // Obtener IDs para la transacción
+        int idCuenta = transaccionDAO.obtenerIdCuenta(numeroCuenta);
+        int idEmpleadoBD = transaccionDAO.obtenerIdEmpleado(idEmpleado);
+        
+        if (idCuenta == -1) {
+            System.out.println(" Error: No se pudo obtener ID de cuenta");
             return;
         }
 
-        Transaccion retiro = new Retiro("T" + System.currentTimeMillis(), monto, empleado, cuenta);
-        retiro.procesar();
-        cuenta.agregarTransaccion(retiro);
-        transaccionRepo.agregarTransaccion(retiro);
-        System.out.println("✓ Retiro de S/ " + String.format("%.2f", monto) + 
-                           " realizado correctamente.");
-        System.out.println("  Nuevo saldo: S/ " + String.format("%.2f", cuenta.getSaldo()));
+        try {
+            // 1. Actualizar saldo en cuenta
+            double nuevoSaldo = cuenta.getSaldo() - monto;
+            boolean saldoActualizado = cuentaDAO.actualizarSaldo(numeroCuenta, nuevoSaldo);
+            
+            if (!saldoActualizado) {
+                System.out.println("❌ Error al actualizar saldo");
+                return;
+            }
+            
+            // 2. Registrar transacción en BD
+            boolean transaccionRegistrada = transaccionDAO.registrarTransaccion(
+                monto, "RETIRO", idCuenta, idEmpleadoBD
+            );
+            
+            if (transaccionRegistrada) {
+                System.out.println("✓ Retiro de S/ " + String.format("%.2f", monto) + 
+                                 " realizado correctamente.");
+                System.out.println("  Nuevo saldo: S/ " + String.format("%.2f", nuevoSaldo));
+            } else {
+                System.out.println("❌ Error al registrar transacción");
+            }
+            
+        } catch (Exception e) {
+            System.err.println("❌ Error en retiro: " + e.getMessage());
+        }
     }
 
     public void verMovimientos(String numeroCuenta) {
@@ -363,26 +485,35 @@ public class BancoService {
             return;
         }
 
-        Cuenta cuenta = cuentaRepo.buscarPorNumero(numeroCuenta);
+        // Verificar que la cuenta existe
+        Cuenta cuenta = cuentaDAO.buscarPorNumero(numeroCuenta);
         if (cuenta == null) {
             System.out.println(" Cuenta no encontrada: " + numeroCuenta);
             return;
         }
 
-        // Si es cliente, solo puede ver sus propias cuentas
+        // Si es cliente, verificar que la cuenta le pertenece
         if (usuarioActual.getTipo().equals("CLIENTE")) {
-            UsuarioCliente uc = (UsuarioCliente) usuarioActual;
-            List<Cuenta> cuentasCliente = titularidadRepo.obtenerCuentasPorCliente(
-                uc.getCliente().getIdCliente()
+            List<Cuenta> cuentasCliente = titularidadDAO.obtenerCuentasPorCliente(
+                ((UsuarioCliente) usuarioActual).getCliente().getIdCliente()
             );
             
-            if (!cuentasCliente.contains(cuenta)) {
+            boolean tieneAcceso = false;
+            for (Cuenta c : cuentasCliente) {
+                if (c.getNumeroCuenta().equals(numeroCuenta)) {
+                    tieneAcceso = true;
+                    break;
+                }
+            }
+            
+            if (!tieneAcceso) {
                 System.out.println(" No tienes permiso para ver los movimientos de esta cuenta.");
                 return;
             }
         }
 
-        List<Transaccion> transacciones = cuenta.getTransacciones();
+        // Obtener transacciones desde BD
+        List<Transaccion> transacciones = transaccionDAO.obtenerTransaccionesPorCuenta(numeroCuenta);
         if (transacciones.isEmpty()) {
             System.out.println("ℹ No hay movimientos registrados en esta cuenta.");
         } else {
@@ -402,19 +533,98 @@ public class BancoService {
             mostrarErrorPermiso("Listar todas las transacciones");
             return;
         }
-        transaccionRepo.listarTransacciones();
+        
+        // Listar transacciones desde BD
+        transaccionDAO.listarTodas();
     }
 
-    // Getters para los repositorios
-    public ClienteRepo getClienteRepo() {
-        return clienteRepo;
+    // ========== ASIGNACIONES (COMPLETAMENTE ACTUALIZADO) ==========
+    public void asignarCuentaACliente(String idCliente, String numeroCuenta) {
+        if (!tienePermiso("ASIGNAR_CUENTA")) {
+            mostrarErrorPermiso("Asignar cuentas a clientes");
+            return;
+        }
+
+        // Asignar cuenta usando TitularidadDAO
+        boolean resultado = titularidadDAO.asignarCuentaACliente(idCliente, numeroCuenta);
+        if (resultado) {
+            // Buscar cliente y cuenta para mostrar mensaje detallado
+            Cliente cliente = clienteDAO.buscarPorCodigo(idCliente);
+            Cuenta cuenta = cuentaDAO.buscarPorNumero(numeroCuenta);
+            if (cliente != null && cuenta != null) {
+                System.out.println("✓ Cuenta " + numeroCuenta + " asignada exitosamente a " + 
+                                   cliente.getNombre() + " " + cliente.getApellido());
+            }
+        } else {
+            System.out.println("❌ No se pudo asignar la cuenta al cliente");
+        }
     }
 
-    public EmpleadoRepo getEmpleadoRepo() {
-        return empleadoRepo;
+    public void mostrarCuentasDeCliente(String idCliente) {
+        if (!tienePermiso("VER_CUENTAS_CLIENTE")) {
+            mostrarErrorPermiso("Ver cuentas de cliente");
+            return;
+        }
+
+        // Buscar cliente en BD
+        Cliente cliente = clienteDAO.buscarPorCodigo(idCliente);
+        if (cliente == null) {
+            System.out.println("❌ Cliente no encontrado: " + idCliente);
+            return;
+        }
+
+        // Obtener cuentas desde BD
+        List<Cuenta> cuentas = titularidadDAO.obtenerCuentasPorCliente(idCliente);
+        
+        if (cuentas.isEmpty()) {
+            System.out.println("ℹ El cliente " + cliente.getNombre() + " " + cliente.getApellido() + 
+                             " no tiene cuentas asociadas");
+        } else {
+            System.out.println("\n=== CUENTAS DE " + cliente.getNombre() + " " + cliente.getApellido() + " ===");
+            for (Cuenta cuenta : cuentas) {
+                System.out.println("• Número: " + cuenta.getNumeroCuenta() + 
+                                 " | Tipo: " + cuenta.getTipoCuenta() + 
+                                 " | Saldo: S/ " + String.format("%.2f", cuenta.getSaldo()));
+            }
+            System.out.println("=============================================\n");
+        }
     }
 
-    public CuentaRepo getCuentaRepo() {
-        return cuentaRepo;
+    // ========== GETTERS para compatibilidad ==========
+    public ClienteDAO getClienteDAO() {
+        return clienteDAO;
+    }
+
+    public EmpleadoDAO getEmpleadoDAO() {
+        return empleadoDAO;
+    }
+
+    public CuentaDAO getCuentaDAO() {
+        return cuentaDAO;
+    }
+    
+    // Métodos antiguos para compatibilidad (se usarán temporalmente)
+    public Object getClienteRepo() {
+        System.out.println("⚠ Usando getClienteRepo() obsoleto - usar getClienteDAO()");
+        return clienteDAO;
+    }
+    
+    public Object getEmpleadoRepo() {
+        System.out.println("⚠ Usando getEmpleadoRepo() obsoleto - usar getEmpleadoDAO()");
+        return empleadoDAO;
+    }
+    
+    public Object getCuentaRepo() {
+        System.out.println("⚠ Usando getCuentaRepo() obsoleto - usar getCuentaDAO()");
+        return cuentaDAO;
+    }
+    
+    // Nuevos getters para los DAOs adicionales
+    public TransaccionDAO getTransaccionDAO() {
+        return transaccionDAO;
+    }
+    
+    public TitularidadDAO getTitularidadDAO() {
+        return titularidadDAO;
     }
 }

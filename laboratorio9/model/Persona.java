@@ -7,6 +7,16 @@ public class Persona {
     protected String direccion;
     protected String telefono;
 
+    // Constructor VACÍO para JDBC
+    public Persona() {
+        this.dni = "";
+        this.nombre = "";
+        this.apellido = "";
+        this.direccion = "";
+        this.telefono = "";
+    }
+    
+    // Constructor con parámetros
     public Persona(String dni, String nombre, String apellido, String direccion, String telefono) {
         this.dni = dni;
         this.nombre = nombre;
@@ -15,6 +25,7 @@ public class Persona {
         this.telefono = telefono;
     }
 
+    // Getters y Setters (los que ya tienes)
     public String getDni() {
         return dni;
     }

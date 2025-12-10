@@ -3,11 +3,20 @@ package DSOO_LABS.laboratorio7.model;
 public class UsuarioAdministrador extends Usuario {
     private String departamento;
 
+    // Constructor vacío para JDBC
+    public UsuarioAdministrador() {
+        super();
+        this.departamento = "";
+        this.tipo = "ADMINISTRADOR";
+    }
+    
+    // Constructor con parámetros
     public UsuarioAdministrador(String nombreUsuario, String contrasena, String departamento) {
         super(nombreUsuario, contrasena, "ADMINISTRADOR");
         this.departamento = departamento;
     }
 
+    // Los demás métodos se mantienen igual...
     public String getDepartamento() {
         return departamento;
     }

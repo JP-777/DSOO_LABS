@@ -85,6 +85,14 @@ public class BancoMain {
                             bancoService.listarTransacciones();
                             interfaz.pausar();
                             break;
+                        case 15: // NUEVA OPCIÓN: Asignar cuenta a cliente
+                            interfaz.asignarCuentaACliente();
+                            interfaz.pausar();
+                            break;
+                        case 16: // NUEVA OPCIÓN: Ver cuentas de un cliente
+                            interfaz.verCuentasDeCliente();
+                            interfaz.pausar();
+                            break;
                         case 0:
                             System.out.println("\n ⟳ Cerrando sesión...");
                             break;
