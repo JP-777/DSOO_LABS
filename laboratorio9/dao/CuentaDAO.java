@@ -29,7 +29,7 @@ public class CuentaDAO {
             System.out.println("✅ Cuentas cargadas desde BD: " + cuentas.size());
             
         } catch (SQLException e) {
-            System.err.println("❌ Error al listar cuentas: " + e.getMessage());
+            System.err.println(" ❌ Error al listar cuentas: " + e.getMessage());
             e.printStackTrace();
         }
         
