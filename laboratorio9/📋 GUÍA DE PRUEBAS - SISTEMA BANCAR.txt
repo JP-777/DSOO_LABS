@@ -1,0 +1,97 @@
+📋 GUÍA DE PRUEBAS - SISTEMA BANCARIO
+🎯 CREDENCIALES PARA PROBAR EL SISTEMA
+ADMINISTRADORES (Acceso completo)
+Usuario	Contraseña	Permisos
+jordan.paredes	admin123	Control total del sistema
+brayan.sanchez	admin456	Control total del sistema
+EMPLEADOS (Gestión limitada)
+Usuario	Contraseña	Cargo
+kevin.peralta	empleado123	Gerente de Operaciones
+elkin.ramos	empleado456	Supervisor de Cuentas
+fernando.solsol	empleado789	Jefe de Atención al Cliente
+CLIENTES (Operaciones personales)
+Usuario	Contraseña	Cliente Asociado
+edwar.saire	cliente123	Edwar Saire (C001)
+elon.musk	cliente456	Elon Musk (C002)
+satya.nadella	cliente789	Satya Nadella (C003)
+tim.cook	cliente012	Tim Cook (C004)
+sundar.pichai	cliente345	Sundar Pichai (C005)
+📊 DATOS EXISTENTES EN LA BASE DE DATOS
+CLIENTES REGISTRADOS
+sql
+ID      | Nombre Completo      | DNI       | Cuentas Asignadas
+C001    | Edwar Saire         | 76543210  | 1001 (Ahorros)
+C002    | Elon Musk           | 45678901  | 1002 (Corriente) 
+C003    | Satya Nadella       | 56789012  | 1003 (Ahorros)
+C004    | Tim Cook            | 67890123  | 1005 (Corriente)
+C005    | Sundar Pichai       | 78901234  | 1006 (Ahorros)
+CUENTAS DISPONIBLES
+sql
+Número  | Tipo       | Saldo Inicial | Estado
+1001    | Ahorros    | S/ 2,500.00   | Asignada (C001)
+1002    | Corriente  | S/ 15,000.00  | Asignada (C002)
+1003    | Ahorros    | S/ 50,000.00  | Asignada (C003)
+1004    | Inversión  | S/ 250,000.00 | DISPONIBLE
+1005    | Corriente  | S/ 85,000.00  | Asignada (C004)
+1006    | Ahorros    | S/ 12,000.00  | Asignada (C005)
+🧪 ESCENARIOS DE PRUEBA RECOMENDADOS
+ESCENARIO 1: Prueba como ADMINISTRADOR (usuario: jordan.paredes)
+Login exitoso → Verificar acceso completo
+
+Agregar nuevo cliente → Crear cliente "C006"
+
+Crear nueva cuenta → Crear cuenta "1007"
+
+Asignar cuenta → Asignar cuenta 1007 al cliente C006
+
+Realizar depósito → Depositar S/ 1,000 a cuenta 1007
+
+Ver movimientos → Confirmar registro del depósito
+
+Eliminar cliente → Eliminar un cliente de prueba
+
+ESCENARIO 2: Prueba como EMPLEADO (usuario: kevin.peralta)
+Verificar permisos limitados
+
+✓ Puede ver clientes
+
+✓ Puede agregar clientes
+
+✓ Puede crear cuentas
+
+✗ NO puede eliminar clientes
+
+✗ NO puede ver/agregar empleados
+
+Operaciones permitidas:
+
+Atender depósito de cliente
+
+Atender retiro de cliente
+
+Consultar saldo de cualquier cuenta
+
+Ver movimientos de cualquier cuenta
+
+ESCENARIO 3: Prueba como CLIENTE (usuario: edwar.saire)
+Verificar acceso restringido
+
+✓ Consultar saldo de SUS cuentas
+
+✓ Realizar depósitos/retiros en SUS cuentas
+
+✓ Ver movimientos de SUS cuentas
+
+✗ NO puede ver información de otros clientes
+
+✗ NO puede crear/eliminar cuentas
+
+Operaciones típicas:
+
+Consultar saldo cuenta 1001
+
+Realizar depósito de S/ 500 a cuenta 1001
+
+Realizar retiro de S/ 200 de cuenta 1001
+
+Ver historial de movimientos
