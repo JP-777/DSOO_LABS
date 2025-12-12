@@ -96,73 +96,89 @@ public class ClienteDAO {
         return null;
     }
     public boolean agregarCliente(Cliente cliente) {
-    // SQL para insertar en dos tablas (personas y clientes)
     String sqlPersona = "INSERT INTO personas (dni, nombre, apellido, direccion, telefono, tipo) VALUES (?, ?, ?, ?, ?, 'CLIENTE')";
     String sqlCliente = "INSERT INTO clientes (id_cliente, codigo_cliente, correo) VALUES (?, ?, ?)";
-    
+    String sqlUsuario = "INSERT INTO usuarios (username, password_hash, tipo_usuario, id_persona, estado) VALUES (?, ?, 'CLIENTE', ?, 'ACTIVO')";
+
     Connection conn = null;
     PreparedStatement pstmtPersona = null;
     PreparedStatement pstmtCliente = null;
-    
+    PreparedStatement pstmtUsuario = null;
+
     try {
         conn = DatabaseConnection.getConnection();
-        conn.setAutoCommit(false); // Iniciar transacción
-        
-        // 1. Insertar en tabla personas
+        if (conn == null) return false;
+
+        conn.setAutoCommit(false);
+
+        // 1) Insertar en personas
         pstmtPersona = conn.prepareStatement(sqlPersona, Statement.RETURN_GENERATED_KEYS);
         pstmtPersona.setString(1, cliente.getDni());
         pstmtPersona.setString(2, cliente.getNombre());
         pstmtPersona.setString(3, cliente.getApellido());
         pstmtPersona.setString(4, cliente.getDireccion());
         pstmtPersona.setString(5, cliente.getTelefono());
-        
+
         int filasPersona = pstmtPersona.executeUpdate();
-        if (filasPersona == 0) {
-            conn.rollback();
-            return false;
-        }
-        
-        // Obtener el ID generado automáticamente para la persona
-        ResultSet generatedKeys = pstmtPersona.getGeneratedKeys();
+        if (filasPersona == 0) { conn.rollback(); return false; }
+
         int idPersonaGenerado = 0;
-        if (generatedKeys.next()) {
-            idPersonaGenerado = generatedKeys.getInt(1);
+        try (ResultSet generatedKeys = pstmtPersona.getGeneratedKeys()) {
+            if (generatedKeys.next()) idPersonaGenerado = generatedKeys.getInt(1);
         }
-        
-        // 2. Insertar en tabla clientes
+
+        if (idPersonaGenerado == 0) { conn.rollback(); return false; }
+
+        // 2) Insertar en clientes
         pstmtCliente = conn.prepareStatement(sqlCliente);
         pstmtCliente.setInt(1, idPersonaGenerado);
-        pstmtCliente.setString(2, cliente.getIdCliente()); // C001, C002, etc.
+        pstmtCliente.setString(2, cliente.getIdCliente()); // C001
         pstmtCliente.setString(3, cliente.getCorreo());
-        
+
         int filasCliente = pstmtCliente.executeUpdate();
-        if (filasCliente == 0) {
-            conn.rollback();
-            return false;
-        }
-        
+        if (filasCliente == 0) { conn.rollback(); return false; }
+
+        // 3) Insertar en usuarios (AUTOMÁTICO)
+        String username = cliente.getIdCliente();  // C001
+        String password = cliente.getDni();        // 12345678 (fácil)
+
+        pstmtUsuario = conn.prepareStatement(sqlUsuario);
+        pstmtUsuario.setString(1, username);
+        pstmtUsuario.setString(2, password);
+        pstmtUsuario.setInt(3, idPersonaGenerado);
+
+        int filasUsuario = pstmtUsuario.executeUpdate();
+        if (filasUsuario == 0) { conn.rollback(); return false; }
+
         conn.commit();
+
         System.out.println("✅ Cliente agregado a BD: " + cliente.getNombre() + " " + cliente.getApellido());
+        System.out.println("🔑 Usuario creado automáticamente:");
+        System.out.println("   username: " + username);
+        System.out.println("   password: " + password);
+
         return true;
-        
+
     } catch (SQLException e) {
-        try {
-            if (conn != null) conn.rollback();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
+        try { if (conn != null) conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
         System.err.println("❌ Error al agregar cliente: " + e.getMessage());
         return false;
+
     } finally {
         try {
-            if (pstmtPersona != null) pstmtPersona.close();
+            if (pstmtUsuario != null) pstmtUsuario.close();
             if (pstmtCliente != null) pstmtCliente.close();
-            if (conn != null) conn.setAutoCommit(true); // Restaurar auto-commit
+            if (pstmtPersona != null) pstmtPersona.close();
+            if (conn != null) {
+                conn.setAutoCommit(true);
+                conn.close();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 }
+
 
 public boolean eliminarCliente(String codigoCliente) {
     Connection conn = null;

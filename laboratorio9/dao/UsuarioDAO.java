@@ -103,4 +103,23 @@ public class UsuarioDAO {
         
         return false;
     }
+
+    public boolean actualizarCredencialesPorPersona(int idPersona, String nuevoUsername, String nuevaPassword) {
+    String sql = "UPDATE usuarios SET username = ?, password_hash = ? WHERE id_persona = ?";
+
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        pstmt.setString(1, nuevoUsername);
+        pstmt.setString(2, nuevaPassword);
+        pstmt.setInt(3, idPersona);
+
+        return pstmt.executeUpdate() > 0;
+
+    } catch (SQLException e) {
+        System.err.println("❌ Error al actualizar credenciales: " + e.getMessage());
+        return false;
+    }
+}
+
 }

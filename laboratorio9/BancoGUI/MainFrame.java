@@ -27,7 +27,17 @@ public class MainFrame extends JFrame {
     public MainFrame(BancoService bancoService) {
         this.bancoService = bancoService;
         this.usuarioActual = bancoService.getUsuarioActual();
+        this.usuarioActual = bancoService.getUsuarioActual();
+        if (this.usuarioActual == null) {
+            JOptionPane.showMessageDialog(this,
+                    "No hay sesión activa. Vuelve a iniciar sesión.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            dispose();
+            new LoginFrame().setVisible(true);
+            return;
+        }
         this.rol = usuarioActual.getTipo();
+
         
         setTitle("Sistema Bancario - " + usuarioActual.getNombreUsuario());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -455,8 +465,15 @@ public class MainFrame extends JFrame {
         dialogo.setLayout(new BorderLayout(10, 10));
         dialogo.add(panelFiltros, BorderLayout.NORTH);
         dialogo.add(scrollPane, BorderLayout.CENTER);
-        dialogo.add(panelStats, BorderLayout.SOUTH);
-        dialogo.add(panelBotones, BorderLayout.PAGE_END);
+        
+        JPanel south = new JPanel(new BorderLayout());
+        south.add(panelStats, BorderLayout.CENTER);
+        south.add(panelBotones, BorderLayout.SOUTH);
+
+        dialogo.add(panelFiltros, BorderLayout.NORTH);
+        dialogo.add(scrollPane, BorderLayout.CENTER);
+        dialogo.add(south, BorderLayout.SOUTH);
+
         dialogo.setVisible(true);
     }
     

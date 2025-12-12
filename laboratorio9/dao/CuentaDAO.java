@@ -5,8 +5,22 @@ import DSOO_LABS.laboratorio7.model.Cuenta;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.text.Normalizer;
 
 public class CuentaDAO {
+
+    private String toDbTipoCuenta(String tipoUI) {
+        if (tipoUI == null) throw new IllegalArgumentException("Tipo cuenta null");
+        String t = Normalizer.normalize(tipoUI, Normalizer.Form.NFD)
+                .replaceAll("\\p{M}+", ""); // quita tildes (Inversión -> Inversion)
+        t = t.trim().toUpperCase();
+
+        if (t.startsWith("AHOR")) return "AHORROS";
+        if (t.startsWith("CORR")) return "CORRIENTE";
+        if (t.startsWith("INV"))  return "INVERSION";
+
+        throw new IllegalArgumentException("Tipo de cuenta inválido: " + tipoUI);
+    }
     
     public List<Cuenta> listarTodas() {
         List<Cuenta> cuentas = new ArrayList<>();
@@ -61,30 +75,25 @@ public class CuentaDAO {
         
         return null;
     }
-    public boolean agregarCuenta(Cuenta cuenta) {
-    String sql = "INSERT INTO cuentas (numero_cuenta, tipo_cuenta, saldo) VALUES (?, ?, ?)";
     
-    try (Connection conn = DatabaseConnection.getConnection();
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
-        
-        pstmt.setString(1, cuenta.getNumeroCuenta());
-        pstmt.setString(2, cuenta.getTipoCuenta());
-        pstmt.setDouble(3, cuenta.getSaldo());
-        
-        int filasInsertadas = pstmt.executeUpdate();
-        
-        if (filasInsertadas > 0) {
-            System.out.println("✅ Cuenta agregada a BD: " + cuenta.getNumeroCuenta());
-            return true;
-        } else {
+    public boolean agregarCuenta(Cuenta cuenta) {
+        String sql = "INSERT INTO cuentas (numero_cuenta, tipo_cuenta, saldo) VALUES (?, ?, ?)";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, cuenta.getNumeroCuenta());
+            pstmt.setString(2, toDbTipoCuenta(cuenta.getTipoCuenta())); // <-- FIX
+            pstmt.setDouble(3, cuenta.getSaldo());
+
+            return pstmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("❌ Error al agregar cuenta: " + e.getMessage());
             return false;
         }
-        
-    } catch (SQLException e) {
-        System.err.println("❌ Error al agregar cuenta: " + e.getMessage());
-        return false;
     }
-}
+
 
 public boolean eliminarCuenta(String numeroCuenta) {
     Connection conn = null;

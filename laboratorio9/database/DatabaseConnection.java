@@ -5,19 +5,18 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/sistema_bancario";
+
+    private static final String URL =
+            "jdbc:mysql://localhost:3306/sistema_bancario" +
+            "?useSSL=false" +
+            "&allowPublicKeyRetrieval=true" +
+            "&serverTimezone=UTC";
+
     private static final String USER = "banco_user";
     private static final String PASSWORD = "banco123";
 
-    // Método que SIEMPRE devuelve una NUEVA conexión
-    public static Connection getConnection() {
-        try {
-            Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-            return conn;
-        } catch (SQLException e) {
-            System.err.println("❌ Error al conectar a MySQL: " + e.getMessage());
-            return null;
-        }
+    // Ahora: si falla, lanza excepción (NO retorna null)
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(URL, USER, PASSWORD);
     }
-    
 }
