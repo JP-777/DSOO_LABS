@@ -45,10 +45,10 @@ public class ClienteDAO {
                 clientes.add(cliente);
             }
             
-            System.out.println("✅ Clientes cargados desde BD: " + clientes.size());
+            System.out.println(" Clientes cargados desde BD: " + clientes.size());
             
         } catch (SQLException e) {
-            System.err.println("❌ Error al listar clientes: " + e.getMessage());
+            System.err.println(" Error al listar clientes: " + e.getMessage());
             e.printStackTrace();
         }
         
@@ -90,7 +90,7 @@ public class ClienteDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error al buscar cliente: " + e.getMessage());
+            System.err.println(" Error al buscar cliente: " + e.getMessage());
         }
         
         return null;
@@ -142,7 +142,7 @@ public class ClienteDAO {
         }
         
         conn.commit();
-        System.out.println("✅ Cliente agregado a BD: " + cliente.getNombre() + " " + cliente.getApellido());
+        System.out.println(" Cliente agregado a BD: " + cliente.getNombre() + " " + cliente.getApellido());
         return true;
         
     } catch (SQLException e) {
@@ -151,7 +151,7 @@ public class ClienteDAO {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        System.err.println("❌ Error al agregar cliente: " + e.getMessage());
+        System.err.println(" Error al agregar cliente: " + e.getMessage());
         return false;
     } finally {
         try {
@@ -222,7 +222,7 @@ public boolean eliminarCliente(String codigoCliente) {
             
             if (filasPersona > 0) {
                 conn.commit();
-                System.out.println("✅ Cliente eliminado de BD: " + codigoCliente);
+                System.out.println(" Cliente eliminado de BD: " + codigoCliente);
                 return true;
             } else {
                 conn.rollback();
@@ -236,7 +236,7 @@ public boolean eliminarCliente(String codigoCliente) {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        System.err.println("❌ Error al eliminar cliente: " + e.getMessage());
+        System.err.println(" Error al eliminar cliente: " + e.getMessage());
         return false;
     } finally {
         try {
@@ -279,7 +279,7 @@ public Cliente buscarPorPersonaId(int idPersona) {
         }
         
     } catch (SQLException e) {
-        System.err.println("❌ Error al buscar cliente por ID persona: " + e.getMessage());
+        System.err.println(" Error al buscar cliente por ID persona: " + e.getMessage());
     }
     
     return null;

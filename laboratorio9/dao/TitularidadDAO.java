@@ -20,7 +20,7 @@ public class TitularidadDAO {
         
         // Verificar si ya está asignada
         if (cuentaYaAsignada(idCliente, idCuenta)) {
-            System.out.println("⚠ Esta cuenta ya está asignada al cliente");
+            System.out.println(" Esta cuenta ya está asignada al cliente");
             return false;
         }
         
@@ -39,12 +39,12 @@ public class TitularidadDAO {
             int filas = pstmt.executeUpdate();
             
             if (filas > 0) {
-                System.out.println("✅ Cuenta asignada exitosamente");
+                System.out.println(" Cuenta asignada exitosamente");
                 return true;
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error al asignar cuenta: " + e.getMessage());
+            System.err.println(" Error al asignar cuenta: " + e.getMessage());
         }
         
         return false;
@@ -80,7 +80,7 @@ public class TitularidadDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error al obtener cuentas del cliente: " + e.getMessage());
+            System.err.println(" Error al obtener cuentas del cliente: " + e.getMessage());
         }
         
         return cuentas;
@@ -102,7 +102,7 @@ public class TitularidadDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error al obtener ID de cliente: " + e.getMessage());
+            System.err.println(" Error al obtener ID de cliente: " + e.getMessage());
         }
         
         return -1;
@@ -123,7 +123,7 @@ public class TitularidadDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error al obtener ID de cuenta: " + e.getMessage());
+            System.err.println(" Error al obtener ID de cuenta: " + e.getMessage());
         }
         
         return -1;
@@ -145,7 +145,7 @@ public class TitularidadDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error al verificar titularidad: " + e.getMessage());
+            System.err.println(" Error al verificar titularidad: " + e.getMessage());
         }
         
         return false;

@@ -26,10 +26,10 @@ public class CuentaDAO {
                 cuentas.add(cuenta);
             }
             
-            System.out.println("✅ Cuentas cargadas desde BD: " + cuentas.size());
+            System.out.println(" Cuentas cargadas desde BD: " + cuentas.size());
             
         } catch (SQLException e) {
-            System.err.println(" ❌ Error al listar cuentas: " + e.getMessage());
+            System.err.println("  Error al listar cuentas: " + e.getMessage());
             e.printStackTrace();
         }
         
@@ -56,7 +56,7 @@ public class CuentaDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error al buscar cuenta: " + e.getMessage());
+            System.err.println(" Error al buscar cuenta: " + e.getMessage());
         }
         
         return null;
@@ -74,14 +74,14 @@ public class CuentaDAO {
         int filasInsertadas = pstmt.executeUpdate();
         
         if (filasInsertadas > 0) {
-            System.out.println("✅ Cuenta agregada a BD: " + cuenta.getNumeroCuenta());
+            System.out.println(" Cuenta agregada a BD: " + cuenta.getNumeroCuenta());
             return true;
         } else {
             return false;
         }
         
     } catch (SQLException e) {
-        System.err.println("❌ Error al agregar cuenta: " + e.getMessage());
+        System.err.println(" Error al agregar cuenta: " + e.getMessage());
         return false;
     }
 }
@@ -107,7 +107,7 @@ public boolean eliminarCuenta(String numeroCuenta) {
         
         if (idCuenta == -1) {
             conn.rollback();
-            System.out.println("⚠ Cuenta no encontrada: " + numeroCuenta);
+            System.out.println(" Cuenta no encontrada: " + numeroCuenta);
             return false; // Cuenta no encontrada
         }
         
@@ -116,7 +116,7 @@ public boolean eliminarCuenta(String numeroCuenta) {
         try (PreparedStatement pstmtTrans = conn.prepareStatement(sqlTransacciones)) {
             pstmtTrans.setInt(1, idCuenta);
             int transEliminadas = pstmtTrans.executeUpdate();
-            System.out.println("✅ Transacciones eliminadas: " + transEliminadas);
+            System.out.println(" Transacciones eliminadas: " + transEliminadas);
         }
         
         // 3. Eliminar relaciones en titularidad
@@ -134,11 +134,11 @@ public boolean eliminarCuenta(String numeroCuenta) {
             
             if (filasEliminadas > 0) {
                 conn.commit();
-                System.out.println("✅ Cuenta eliminada de BD: " + numeroCuenta);
+                System.out.println(" Cuenta eliminada de BD: " + numeroCuenta);
                 return true;
             } else {
                 conn.rollback();
-                System.out.println("❌ No se pudo eliminar la cuenta");
+                System.out.println(" No se pudo eliminar la cuenta");
                 return false;
             }
         }
@@ -149,7 +149,7 @@ public boolean eliminarCuenta(String numeroCuenta) {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        System.err.println("❌ Error al eliminar cuenta: " + e.getMessage());
+        System.err.println(" Error al eliminar cuenta: " + e.getMessage());
         return false;
     } finally {
         try {
@@ -176,7 +176,7 @@ public boolean actualizarSaldo(String numeroCuenta, double nuevoSaldo) {
         return filasActualizadas > 0;
         
     } catch (SQLException e) {
-        System.err.println("❌ Error al actualizar saldo: " + e.getMessage());
+        System.err.println(" Error al actualizar saldo: " + e.getMessage());
         return false;
     }
 }
