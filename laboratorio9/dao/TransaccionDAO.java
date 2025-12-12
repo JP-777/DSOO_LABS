@@ -30,7 +30,7 @@ public class TransaccionDAO {
         return filas > 0;
         
     } catch (SQLException e) {
-        System.err.println("❌ Error al registrar transacción: " + e.getMessage());
+        System.err.println("Error al registrar transacción: " + e.getMessage());
         return false;
     }
 }
@@ -85,7 +85,7 @@ public class TransaccionDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error al obtener transacciones: " + e.getMessage());
+            System.err.println(" Error al obtener transacciones: " + e.getMessage());
         }
         
         return transacciones;
@@ -128,7 +128,7 @@ public class TransaccionDAO {
             System.out.println("================================\n");
             
         } catch (SQLException e) {
-            System.err.println("❌ Error al listar transacciones: " + e.getMessage());
+            System.err.println(" Error al listar transacciones: " + e.getMessage());
         }
     }
     
@@ -148,7 +148,7 @@ public class TransaccionDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error al obtener ID de cuenta: " + e.getMessage());
+            System.err.println(" Error al obtener ID de cuenta: " + e.getMessage());
         }
         
         return -1;
@@ -170,7 +170,7 @@ public class TransaccionDAO {
             }
             
         } catch (SQLException e) {
-            System.err.println("❌ Error al obtener ID de empleado: " + e.getMessage());
+            System.err.println(" Error al obtener ID de empleado: " + e.getMessage());
         }
         
         return -1;
