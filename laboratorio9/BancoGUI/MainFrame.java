@@ -10,6 +10,10 @@ import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import DSOO_LABS.laboratorio7.database.DatabaseConnection;
 
 public class MainFrame extends JFrame {
     private BancoService bancoService;
@@ -618,6 +622,10 @@ public class MainFrame extends JFrame {
             JButton btnAgregar = new JButton("➕ Agregar Empleado");
             panelBotones.add(btnAgregar);
             btnAgregar.addActionListener(e -> agregarEmpleado());
+            
+            JButton btnEliminar = new JButton("🗑️ Eliminar Empleado");
+        panelBotones.add(btnEliminar);
+        btnEliminar.addActionListener(e -> eliminarEmpleadoDeTabla());
         }
         
         btnRefrescar.addActionListener(e -> cargarEmpleados());
@@ -687,6 +695,7 @@ public class MainFrame extends JFrame {
         panelBotones.add(btnRetiro);
         panelBotones.add(btnMovimientos);
         
+        /*OCULTO ESTE BOTON SIN USAR
         if (rol.equals("ADMINISTRADOR") || rol.equals("EMPLEADO")) {
             JButton btnRefrescar = new JButton("🔄 Refrescar");
             JButton btnListarTransacciones = new JButton("📋 Listar Transacciones");
@@ -702,7 +711,7 @@ public class MainFrame extends JFrame {
             });
             
             btnListarTransacciones.addActionListener(e -> mostrarTransaccionesEnVentana());
-        }
+        }*/
         
         btnConsultarSaldo.addActionListener(e -> consultarSaldo());
         btnDeposito.addActionListener(e -> realizarDeposito());
@@ -879,24 +888,79 @@ public class MainFrame extends JFrame {
     }
     
     private void cargarTransacciones() {
-        if (modeloTransacciones == null) return;
-        
-        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-            @Override
-            protected Void doInBackground() throws Exception {
-                return null;
+    if (modeloTransacciones == null) return;
+    
+    // Limpiar tabla primero
+    SwingUtilities.invokeLater(() -> {
+        modeloTransacciones.setRowCount(0);
+    });
+    
+    // Ejecutar en segundo plano
+    new Thread(() -> {
+        try {
+            // 1. Conectar a BD
+            Connection conn = DatabaseConnection.getConnection();
+            
+            // 2. Consulta SIMPLE para datos reales
+            String sql = "SELECT " +
+                        "t.id_transaccion, " +
+                        "t.tipo_transaccion, " + 
+                        "t.monto, " +
+                        "c.numero_cuenta, " +
+                        "DATE_FORMAT(t.fecha_hora, '%d/%m/%Y %H:%i') as fecha, " +
+                        "e.codigo_empleado " +
+                        "FROM transacciones t " +
+                        "JOIN cuentas c ON t.id_cuenta = c.id_cuenta " +
+                        "LEFT JOIN empleados e ON t.id_empleado = e.id_empleado " +
+                        "ORDER BY t.fecha_hora DESC " +
+                        "LIMIT 15";
+            
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            
+            // 3. Procesar resultados
+            while (rs.next()) {
+                String id = "T" + rs.getInt("id_transaccion");
+                String tipo = rs.getString("tipo_transaccion");
+                String monto = "S/ " + String.format("%.2f", rs.getDouble("monto"));
+                String cuenta = rs.getString("numero_cuenta");
+                String fecha = rs.getString("fecha");
+                String empleado = rs.getString("codigo_empleado");
+                
+                if (empleado == null) empleado = "Sistema";
+                
+                final Object[] fila = {id, tipo, monto, cuenta, fecha, empleado};
+                
+                // Agregar a tabla en hilo de UI
+                SwingUtilities.invokeLater(() -> {
+                    modeloTransacciones.addRow(fila);
+                });
             }
             
-            @Override
-            protected void done() {
-                modeloTransacciones.setRowCount(0);
-                // Datos de ejemplo
-                modeloTransacciones.addRow(new Object[]{"T001", "DEPOSITO", "S/ 500.00", "1001", "2024-01-15", "E001"});
-                modeloTransacciones.addRow(new Object[]{"T002", "RETIRO", "S/ 200.00", "1002", "2024-01-16", "E002"});
-            }
-        };
-        worker.execute();
-    }
+            // 4. Cerrar conexiones
+            rs.close();
+            pstmt.close();
+            conn.close();
+            
+        } catch (Exception e) {
+            System.err.println("Error cargando transacciones reales: " + e.getMessage());
+            
+            // Si falla, mostrar datos de ejemplo
+            SwingUtilities.invokeLater(() -> {
+                mostrarTransaccionesEjemplo();
+            });
+        }
+    }).start();
+}
+
+private void mostrarTransaccionesEjemplo() {
+    modeloTransacciones.setRowCount(0);
+    
+    // Mensaje informativo
+    modeloTransacciones.addRow(new Object[]{
+        "ℹ", "Sin datos reales", "Ejecuta transacciones", "primero", "para ver", "historial"
+    });
+}
     
     // ========== OPERACIONES ==========
     
@@ -1001,65 +1065,59 @@ public class MainFrame extends JFrame {
     }
     
     private void agregarEmpleado() {
-        JDialog dialogo = new JDialog(this, "Agregar Empleado", true);
-        dialogo.setSize(400, 350);
-        dialogo.setLocationRelativeTo(this);
-        
-        JPanel panel = new JPanel(new GridLayout(7, 2, 10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        
-        JTextField txtId = new JTextField();
-        JTextField txtDni = new JTextField();
-        JTextField txtNombre = new JTextField();
-        JTextField txtApellido = new JTextField();
-        JTextField txtDireccion = new JTextField();
-        JTextField txtTelefono = new JTextField();
-        JTextField txtCargo = new JTextField();
-        
-        panel.add(new JLabel("ID (E001):"));
-        panel.add(txtId);
-        panel.add(new JLabel("DNI:"));
-        panel.add(txtDni);
-        panel.add(new JLabel("Nombre:"));
-        panel.add(txtNombre);
-        panel.add(new JLabel("Apellido:"));
-        panel.add(txtApellido);
-        panel.add(new JLabel("Dirección:"));
-        panel.add(txtDireccion);
-        panel.add(new JLabel("Teléfono:"));
-        panel.add(txtTelefono);
-        panel.add(new JLabel("Cargo:"));
-        panel.add(txtCargo);
-        
-        JButton btnGuardar = new JButton("Guardar");
-        JButton btnCancelar = new JButton("Cancelar");
-        
-        btnGuardar.addActionListener(e -> {
-            if (validarCamposEmpleado(txtId.getText(), txtDni.getText(), txtNombre.getText(),
-                txtApellido.getText(), txtDireccion.getText(), txtTelefono.getText(),
-                txtCargo.getText())) {
-                
-                bancoService.agregarEmpleado(
-                    txtId.getText(), txtDni.getText(), txtNombre.getText(),
-                    txtApellido.getText(), txtDireccion.getText(), txtTelefono.getText(),
-                    txtCargo.getText()
-                );
-                cargarEmpleados();
-                dialogo.dispose();
-            }
+    JDialog dialogo = new JDialog(this, "Agregar Empleado", true);
+    dialogo.setSize(400, 400);
+    dialogo.setLocationRelativeTo(this);
+    
+    // Formulario SIMPLE - solo lo básico
+    JPanel panel = new JPanel(new GridLayout(7, 2, 10, 10));
+    panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    
+    JTextField txtId = new JTextField();
+    JTextField txtDni = new JTextField();
+    JTextField txtNombre = new JTextField();
+    JTextField txtApellido = new JTextField();
+    JTextField txtTelefono = new JTextField();
+    JTextField txtCargo = new JTextField();
+    
+    panel.add(new JLabel("ID (E007):")); panel.add(txtId);
+    panel.add(new JLabel("DNI:")); panel.add(txtDni);
+    panel.add(new JLabel("Nombre:")); panel.add(txtNombre);
+    panel.add(new JLabel("Apellido:")); panel.add(txtApellido);
+    panel.add(new JLabel("Teléfono:")); panel.add(txtTelefono);
+    panel.add(new JLabel("Cargo:")); panel.add(txtCargo);
+    
+    JButton btnGuardar = new JButton("Agregar a Tabla");
+    JButton btnCancelar = new JButton("Cancelar");
+    
+    btnGuardar.addActionListener(e -> {
+        // Solo agrega a la tabla visual (NO a BD)
+        modeloEmpleados.addRow(new Object[]{
+            txtId.getText(),
+            txtDni.getText(),
+            txtNombre.getText(),
+            txtApellido.getText(),
+            txtCargo.getText(),
+            txtTelefono.getText()
         });
         
-        btnCancelar.addActionListener(e -> dialogo.dispose());
+        JOptionPane.showMessageDialog(dialogo,
+            "Empleado agregado a la tabla\n" +
+            "(refrescar si es necesario)",
+            "Agregado",
+            JOptionPane.INFORMATION_MESSAGE);
         
-        JPanel panelBotones = new JPanel();
-        panelBotones.add(btnGuardar);
-        panelBotones.add(btnCancelar);
-        
-        dialogo.setLayout(new BorderLayout());
-        dialogo.add(panel, BorderLayout.CENTER);
-        dialogo.add(panelBotones, BorderLayout.SOUTH);
-        dialogo.setVisible(true);
-    }
+        dialogo.dispose();
+    });
+    
+    btnCancelar.addActionListener(e -> dialogo.dispose());
+    
+    panel.add(btnGuardar);
+    panel.add(btnCancelar);
+    
+    dialogo.add(panel);
+    dialogo.setVisible(true);
+}
     
     private boolean validarCamposEmpleado(String id, String dni, String nombre, String apellido,
                                          String direccion, String telefono, String cargo) {
@@ -1188,71 +1246,106 @@ public class MainFrame extends JFrame {
     }
     
     private void realizarRetiro() {
-        JDialog dialogo = new JDialog(this, "Realizar Retiro", true);
-        dialogo.setSize(300, 150);
-        dialogo.setLocationRelativeTo(this);
-        
-        JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        
-        JTextField txtCuenta = new JTextField();
-        JTextField txtMonto = new JTextField();
-        
-        panel.add(new JLabel("Cuenta:"));
-        panel.add(txtCuenta);
-        panel.add(new JLabel("Monto:"));
-        panel.add(txtMonto);
-        
-        JButton btnRetirar = new JButton("Retirar");
-        JButton btnCancelar = new JButton("Cancelar");
-        
-        btnRetirar.addActionListener(e -> {
-            try {
-                bancoService.realizarRetiro(
-                    txtCuenta.getText(),
-                    Double.parseDouble(txtMonto.getText()),
-                    "E001"
-                );
-                cargarCuentas();
-                dialogo.dispose();
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(dialogo, "Monto inválido");
-            }
-        });
-        
-        btnCancelar.addActionListener(e -> dialogo.dispose());
-        
-        panel.add(btnRetirar);
-        panel.add(btnCancelar);
-        
-        dialogo.add(panel);
-        dialogo.setVisible(true);
-    }
+    JDialog dialogo = new JDialog(this, "Realizar Retiro", true);
+    dialogo.setSize(350, 200);  // Un poco más grande para mensajes
+    dialogo.setLocationRelativeTo(this);
     
-    // MÉTODO VER MOVIMIENTOS CORREGIDO
-    private void verMovimientos() {
-        String cuenta = JOptionPane.showInputDialog(this, "Número de cuenta:");
-        if (cuenta != null && !cuenta.trim().isEmpty()) {
-            // Primero verificar que la cuenta existe
-            Cuenta cuentaObj = bancoService.getCuentaDAO().buscarPorNumero(cuenta);
+    JPanel panel = new JPanel(new GridLayout(4, 2, 10, 10));  // 4 filas ahora
+    panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    
+    JTextField txtCuenta = new JTextField();
+    JTextField txtMonto = new JTextField();
+    JLabel lblError = new JLabel(" ");
+    lblError.setForeground(Color.RED);
+    lblError.setFont(new Font("Arial", Font.PLAIN, 11));
+    
+    panel.add(new JLabel("Cuenta:"));
+    panel.add(txtCuenta);
+    panel.add(new JLabel("Monto:"));
+    panel.add(txtMonto);
+    panel.add(new JLabel(""));  // Espacio vacío
+    panel.add(lblError);  // Aquí aparecerán errores
+    
+    JButton btnRetirar = new JButton("Retirar");
+    JButton btnCancelar = new JButton("Cancelar");
+    
+    btnRetirar.addActionListener(e -> {
+        try {
+            String cuenta = txtCuenta.getText().trim();
+            String montoStr = txtMonto.getText().trim();
             
-            if (cuentaObj != null) {
-                // Usar el método que ya funciona en consola
-                bancoService.verMovimientos(cuenta);
-                
-                // Y mostrar también en una ventana simple
-                String mensaje = "Consulta de movimientos para la cuenta: " + cuenta + "\n" +
-                               "Saldo actual: S/ " + String.format("%.2f", cuentaObj.getSaldo()) + "\n" +
-                               "Tipo de cuenta: " + cuentaObj.getTipoCuenta() + "\n\n" +
-                               "Los detalles de los movimientos se han mostrado en la consola.\n" +
-                               "Fecha de consulta: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
-                
-                mostrarMensajeEnVentana("Movimientos - Cuenta " + cuenta, mensaje);
-            } else {
-                JOptionPane.showMessageDialog(this, "Cuenta no encontrada: " + cuenta);
+            // Validaciones básicas
+            if (cuenta.isEmpty() || montoStr.isEmpty()) {
+                lblError.setText("Complete todos los campos");
+                return;
             }
+            
+            double monto = Double.parseDouble(montoStr);
+            
+            // Primero verificar saldo ANTES de intentar retiro
+            Cuenta cuentaObj = bancoService.getCuentaDAO().buscarPorNumero(cuenta);
+            if (cuentaObj == null) {
+                lblError.setText("Cuenta no encontrada");
+                return;
+            }
+            
+            if (monto > cuentaObj.getSaldo()) {
+                lblError.setText("<html>Saldo insuficiente<br>Saldo actual: S/ " + 
+                    String.format("%.2f", cuentaObj.getSaldo()) + "</html>");
+                return;
+            }
+            
+            // Si pasa validaciones, hacer retiro
+            bancoService.realizarRetiro(cuenta, monto, "E001");
+            cargarCuentas();
+            
+            // Mostrar mensaje de éxito
+            JOptionPane.showMessageDialog(dialogo,
+                "✓ Retiro exitoso de S/ " + String.format("%.2f", monto) + 
+                "\nNuevo saldo: S/ " + String.format("%.2f", (cuentaObj.getSaldo() - monto)),
+                "Retiro Completado",
+                JOptionPane.INFORMATION_MESSAGE);
+            
+            dialogo.dispose();
+            
+        } catch (NumberFormatException ex) {
+            lblError.setText("Monto inválido. Use números.");
+        } catch (Exception ex) {
+            lblError.setText("Error: " + ex.getMessage());
+        }
+    });
+    
+    btnCancelar.addActionListener(e -> dialogo.dispose());
+    
+    panel.add(btnRetirar);
+    panel.add(btnCancelar);
+    
+    dialogo.add(panel);
+    dialogo.setVisible(true);
+}
+    
+    private void verMovimientos() {
+    String cuenta = JOptionPane.showInputDialog(this, "Número de cuenta:");
+    if (cuenta != null && !cuenta.trim().isEmpty()) {
+        
+        // Primero verificar que la cuenta existe
+        Cuenta cuentaObj = bancoService.getCuentaDAO().buscarPorNumero(cuenta);
+        
+        if (cuentaObj != null) {
+            // 1. Mostrar en consola (como ya hace)
+            bancoService.verMovimientos(cuenta);
+            
+            // 2. También mostrar en ventana GUI
+            mostrarMovimientosEnVentanaSimple(cuenta, cuentaObj);
+            
+        } else {
+            JOptionPane.showMessageDialog(this, 
+                "❌ Cuenta no encontrada: " + cuenta,
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
         }
     }
+}
     
     private void asignarCuentaACliente() {
         JDialog dialogo = new JDialog(this, "Asignar Cuenta", true);
@@ -1308,4 +1401,37 @@ public class MainFrame extends JFrame {
             mensaje + ": " + e.getMessage(),
             "Error", JOptionPane.ERROR_MESSAGE);
     }
+    private void eliminarEmpleadoDeTabla() {
+    if (tablaEmpleados == null) return;
+    
+    int filaSeleccionada = tablaEmpleados.getSelectedRow();
+    
+    if (filaSeleccionada == -1) {
+        JOptionPane.showMessageDialog(this,
+            "Seleccione un empleado de la tabla",
+            "Advertencia",
+            JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+    String id = tablaEmpleados.getValueAt(filaSeleccionada, 0).toString();
+    String nombre = tablaEmpleados.getValueAt(filaSeleccionada, 2).toString();
+    
+    int confirmar = JOptionPane.showConfirmDialog(this,
+        "¿Eliminar empleado?\n" +
+        "ID: " + id + "\n" +
+        "Nombre: " + nombre,
+        "Confirmar Eliminación",
+        JOptionPane.YES_NO_OPTION);
+    
+    if (confirmar == JOptionPane.YES_OPTION) {
+        // Solo elimina de la tabla visual (NO de BD)
+        modeloEmpleados.removeRow(filaSeleccionada);
+        JOptionPane.showMessageDialog(this,
+            "Empleado eliminado de la tabla\n" +
+            "(refrescar si es necesario)",
+            "Eliminado",
+            JOptionPane.INFORMATION_MESSAGE);
+    }
+}
 }

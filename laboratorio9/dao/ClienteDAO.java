@@ -31,7 +31,7 @@ public class ClienteDAO {
              ResultSet rs = pstmt.executeQuery()) {
             
             while (rs.next()) {
-                // Crear cliente con datos de la BasedeDatos
+                // Crear cliente con datos de la BD
                 Cliente cliente = new Cliente(
                     rs.getString("codigo_cliente"),  // idCliente (C001, C002)
                     rs.getString("dni"),

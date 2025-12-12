@@ -20,5 +20,4 @@ public class DatabaseConnection {
         }
     }
     
-    // NO necesitamos closeConnection() porque try-with-resources lo hace
 }
