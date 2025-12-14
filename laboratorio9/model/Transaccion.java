@@ -1,4 +1,4 @@
-package DSOO_LABS.laboratorio7.model;
+package DSOO_LABS.laboratorio9.model;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +16,22 @@ public abstract class Transaccion {
         this.cuenta = cuenta;
         this.fecha = LocalDateTime.now();
     }
+    public Empleado getEmpleado() {
+        return empleado;
+    }
 
+    public Cuenta getCuenta() {
+        return cuenta;
+    }
+    
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
+    }
+    
+    public void setCuenta(Cuenta cuenta) {
+        this.cuenta = cuenta;
+    }
+    
     public String getIdTransaccion() {
         return idTransaccion;
     }

@@ -1,4 +1,4 @@
-package DSOO_LABS.laboratorio7.model;
+package DSOO_LABS.laboratorio9.model;
 
 public class Empleado extends Persona {
     private String idEmpleado;
@@ -22,6 +22,12 @@ public class Empleado extends Persona {
     // Los getters y demás métodos se mantienen igual...
     public String getIdEmpleado() {
         return idEmpleado;
+    }
+     public void setIdEmpleado(String idEmpleado) {
+         this.idEmpleado = idEmpleado;
+    }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getCargo() {

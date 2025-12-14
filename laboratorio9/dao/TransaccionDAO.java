@@ -1,9 +1,11 @@
-package DSOO_LABS.laboratorio7.dao;
+package DSOO_LABS.laboratorio9.dao;
 
-import DSOO_LABS.laboratorio7.database.DatabaseConnection;
-import DSOO_LABS.laboratorio7.model.Transaccion;
-import DSOO_LABS.laboratorio7.model.Deposito;
-import DSOO_LABS.laboratorio7.model.Retiro;
+import DSOO_LABS.laboratorio9.database.DatabaseConnection;
+import DSOO_LABS.laboratorio9.model.Transaccion;
+import DSOO_LABS.laboratorio9.model.Cuenta;
+import DSOO_LABS.laboratorio9.model.Deposito;
+import DSOO_LABS.laboratorio9.model.Empleado;
+import DSOO_LABS.laboratorio9.model.Retiro;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,30 +13,104 @@ import java.util.List;
 public class TransaccionDAO {
     
     public boolean registrarTransaccion(double monto, String tipoTransaccion, int idCuenta, int idEmpleado) {
-    String sql = """
-        INSERT INTO transacciones 
-        (tipo_transaccion, monto, id_cuenta, id_empleado, descripcion) 
-        VALUES (?, ?, ?, ?, ?)
-        """;
-    
-    try (Connection conn = DatabaseConnection.getConnection();
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        String sql = """
+            INSERT INTO transacciones 
+            (tipo_transaccion, monto, id_cuenta, id_empleado, descripcion, fecha_hora) 
+            VALUES (?, ?, ?, ?, ?, NOW())
+            """;
         
-        pstmt.setString(1, tipoTransaccion); // "DEPOSITO" o "RETIRO"
-        pstmt.setDouble(2, monto);           // ← ARREGLADO
-        pstmt.setInt(3, idCuenta);
-        pstmt.setInt(4, idEmpleado);
-        pstmt.setString(5, tipoTransaccion + " realizado");
-        
-        int filas = pstmt.executeUpdate();
-        return filas > 0;
-        
-    } catch (SQLException e) {
-        System.err.println("Error al registrar transacción: " + e.getMessage());
-        return false;
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, tipoTransaccion);
+            pstmt.setDouble(2, monto);
+            pstmt.setInt(3, idCuenta);
+            
+            // TRUCO: Si el ID es -1 (no encontrado o cajero), insertamos NULL en la BD
+            if (idEmpleado == -1) {
+                pstmt.setNull(4, java.sql.Types.INTEGER);
+            } else {
+                pstmt.setInt(4, idEmpleado);
+            }
+            
+            pstmt.setString(5, tipoTransaccion + " realizado vía Sistema");
+            
+            int filas = pstmt.executeUpdate();
+            return filas > 0;
+            
+        } catch (SQLException e) {
+            System.err.println("Error SQL al registrar transacción: " + e.getMessage());
+            // Imprime esto en consola para que veas si hay otro error oculto
+            e.printStackTrace(); 
+            return false;
+        }
     }
-}
-    
+    // PEGAR ESTO EN TransaccionDAO.java
+
+    public List<Transaccion> obtenerUltimasTransacciones() {
+        List<Transaccion> lista = new ArrayList<>();
+        
+        // USO LEFT JOIN PARA QUE NO OCULTE LAS TRANSACCIONES SIN EMPLEADO
+        String sql = """
+            SELECT t.id_transaccion, t.tipo_transaccion, t.monto, t.fecha_hora,
+                   c.numero_cuenta, c.tipo_cuenta, c.saldo,
+                   e.codigo_empleado, p.nombre, p.apellido
+            FROM transacciones t
+            JOIN cuentas c ON t.id_cuenta = c.id_cuenta
+            LEFT JOIN empleados e ON t.id_empleado = e.id_empleado
+            LEFT JOIN personas p ON e.id_empleado = p.id_persona
+            ORDER BY t.fecha_hora DESC
+            LIMIT 50
+            """;
+            
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+             
+            System.out.println("🔍 Buscando transacciones en BD..."); // DEBUG
+            int contador = 0;
+
+            while (rs.next()) {
+                contador++;
+                // Reconstruir objetos
+                Cuenta c = new Cuenta(rs.getString("numero_cuenta"), rs.getString("tipo_cuenta"), rs.getDouble("saldo"));
+                
+                Empleado emp = null;
+                String codigoEmp = rs.getString("codigo_empleado");
+                
+                if (codigoEmp != null) {
+                    emp = new Empleado();
+                    
+                    // 2. ¡AQUÍ ESTÁ EL ERROR! Faltaba esta línea:
+                    emp.setIdEmpleado(codigoEmp); 
+                    
+                    // Opcional: También poner el nombre si quieres
+                    emp.setNombre(rs.getString("nombre")); 
+                }
+
+                String tipo = rs.getString("tipo_transaccion");
+                Transaccion t;
+                
+                // Convertir la fecha de SQL a Java
+                java.sql.Timestamp fechaSql = rs.getTimestamp("fecha_hora");
+                // Nota: Aquí podrías necesitar ajustar la fecha si Transaccion usa LocalDateTime
+
+                if ("DEPOSITO".equalsIgnoreCase(tipo)) {
+                    t = new Deposito("T"+rs.getInt("id_transaccion"), rs.getDouble("monto"), emp, c);
+                } else {
+                    t = new Retiro("T"+rs.getInt("id_transaccion"), rs.getDouble("monto"), emp, c);
+                }
+                
+                lista.add(t);
+            }
+            System.out.println("✅ Se encontraron " + contador + " transacciones."); // DEBUG
+            
+        } catch (SQLException e) {
+            System.err.println("❌ Error SQL al listar transacciones: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return lista;
+    }
     // Obtener transacciones de una cuenta específica
     public List<Transaccion> obtenerTransaccionesPorCuenta(String numeroCuenta) {
         List<Transaccion> transacciones = new ArrayList<>();
