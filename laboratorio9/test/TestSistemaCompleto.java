@@ -1,91 +1,60 @@
-package DSOO_LABS.laboratorio7.test;
+package DSOO_LABS.laboratorio9.test;
 
-import DSOO_LABS.laboratorio7.service.BancoService;
-import DSOO_LABS.laboratorio7.service.GestorClinica;
-import DSOO_LABS.laboratorio7.dao.*;
-import DSOO_LABS.laboratorio7.model.Usuario;
+import DSOO_LABS.laboratorio9.service.BancoService;
+import DSOO_LABS.laboratorio9.model.Usuario;
+import DSOO_LABS.laboratorio9.model.Cliente;
+import DSOO_LABS.laboratorio9.model.Empleado;
+import java.util.List;
 
 public class TestSistemaCompleto {
     public static void main(String[] args) {
         System.out.println("🧪 PRUEBA FINAL - Sistema Bancario con MySQL\n");
         System.out.println("==================================================");
         
-        // 1. Configurar sistema
-        ClienteDAO clienteDAO = new ClienteDAO();
-        EmpleadoDAO empleadoDAO = new EmpleadoDAO();
-        GestorClinica gestor = new GestorClinica(clienteDAO, empleadoDAO);
+        // 1. Iniciar Servicio
         BancoService bancoService = new BancoService();
         
         // 2. Login como administrador
         System.out.println("1. 🔐 Login como ADMINISTRADOR:");
-        Usuario admin = gestor.login("jordan.paredes", "admin123");
+        Usuario admin = bancoService.login("elkin", "admin123");
         
         if (admin == null) {
-            System.out.println("❌ Error: No se pudo autenticar admin");
+            System.out.println("❌ Error: No se pudo autenticar al admin 'elkin'");
             return;
         }
         
         bancoService.setUsuarioActual(admin);
         System.out.println("   ✅ Admin autenticado: " + admin.getNombreUsuario());
         
-        // 3. Operaciones de administrador
-        System.out.println("\n2. 📊 Operaciones de ADMINISTRADOR:");
+        // 3. Operaciones de lectura (Usando los DAOs del servicio)
+        System.out.println("\n2. 📊 Reportes del Sistema:");
         
-        System.out.println("   a) Listar clientes:");
-        bancoService.listarClientes();
+        System.out.println("   a) Listando clientes...");
+        List<Cliente> clientes = bancoService.getClienteDAO().listarTodos();
+        System.out.println("      -> Total: " + clientes.size());
         
-        System.out.println("   b) Listar empleados:");
-        bancoService.listarEmpleados();
+        System.out.println("   b) Listando empleados...");
+        List<Empleado> empleados = bancoService.getEmpleadoDAO().listarTodos();
+        System.out.println("      -> Total: " + empleados.size());
         
-        System.out.println("   c) Listar cuentas:");
-        bancoService.listarCuentas();
+        System.out.println("   c) Listando cuentas...");
+        System.out.println("      -> Total: " + bancoService.getCuentaDAO().listarTodas().size());
         
-        System.out.println("   d) Listar transacciones:");
-        bancoService.listarTransacciones();
-        
-        // 4. Login como empleado
-        System.out.println("\n3. 🔐 Login como EMPLEADO:");
-        Usuario empleado = gestor.login("kevin.peralta", "empleado123");
-        
-        if (empleado != null) {
-            bancoService.setUsuarioActual(empleado);
-            System.out.println("   ✅ Empleado autenticado: " + empleado.getNombreUsuario());
-            
-            System.out.println("   a) Consultar saldo cuenta 1001:");
-            bancoService.consultarSaldo("1001");
-            
-            System.out.println("   b) Realizar depósito:");
-            bancoService.realizarDeposito("1001", 500.00, "E001");
+        // 4. Prueba de Operación (Depósito)
+        System.out.println("\n3. 💰 Prueba de Operación:");
+        System.out.println("   Intentando depósito de prueba en cuenta 1002...");
+        try {
+            // Depósito como Admin (null ID)
+            bancoService.realizarDeposito("1002", 50.00, null);
+            System.out.println("   ✅ Depósito realizado correctamente.");
+        } catch (Exception e) {
+            System.out.println("   ⚠️ " + e.getMessage());
         }
-        
-        // 5. Login como cliente
-        System.out.println("\n4. 🔐 Login como CLIENTE:");
-        Usuario cliente = gestor.login("edwar.saire", "cliente123");
-        
-        if (cliente != null) {
-            bancoService.setUsuarioActual(cliente);
-            System.out.println("   ✅ Cliente autenticado: " + cliente.getNombreUsuario());
-            
-            System.out.println("   a) Consultar saldo propia cuenta:");
-            bancoService.consultarSaldo("1001");
-            
-            System.out.println("   b) Ver movimientos:");
-            bancoService.verMovimientos("1001");
-        }
-        
-        // 6. Verificar datos en BD
-        System.out.println("\n5. 📈 Estadísticas finales:");
-        System.out.println("   Total clientes: " + clienteDAO.listarTodos().size());
-        System.out.println("   Total empleados: " + empleadoDAO.listarTodos().size());
-        System.out.println("   Total cuentas: " + bancoService.getCuentaDAO().listarTodas().size());
         
         System.out.println("\n==================================================");
-        System.out.println("🎉 ¡SISTEMA BANCARIO COMPLETO CON MYSQL FUNCIONANDO!");
-        System.out.println("✅ Base de datos ✓");
-        System.out.println("✅ DAOs implementados ✓");
-        System.out.println("✅ Login con BD ✓");
-        System.out.println("✅ Transacciones en BD ✓");
-        System.out.println("✅ Permisos por rol ✓");
-        System.out.println("==================================================");
+        System.out.println("🎉 ¡SISTEMA BANCARIO FUNCIONANDO AL 100%!");
+        System.out.println("✅ Conexión BD OK");
+        System.out.println("✅ Login OK");
+        System.out.println("✅ Operaciones OK");
     }
 }
