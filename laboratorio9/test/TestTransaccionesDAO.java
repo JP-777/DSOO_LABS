@@ -1,6 +1,6 @@
-package DSOO_LABS.laboratorio7.test;
+package DSOO_LABS.laboratorio9.test;
 
-import DSOO_LABS.laboratorio7.dao.*;
+import DSOO_LABS.laboratorio9.dao.*;
 
 public class TestTransaccionesDAO {
     public static void main(String[] args) {

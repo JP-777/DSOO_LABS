@@ -1,7 +1,7 @@
-package DSOO_LABS.laboratorio7.test;
+package DSOO_LABS.laboratorio9.test;
 
-import DSOO_LABS.laboratorio7.dao.ClienteDAO;
-import DSOO_LABS.laboratorio7.model.Cliente;
+import DSOO_LABS.laboratorio9.dao.ClienteDAO;
+import DSOO_LABS.laboratorio9.model.Cliente;
 import java.util.List;
 
 public class TestClienteDAO {

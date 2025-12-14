@@ -1,4 +1,4 @@
-package DSOO_LABS.laboratorio7.database;
+package DSOO_LABS.laboratorio9.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

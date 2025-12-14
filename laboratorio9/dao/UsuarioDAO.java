@@ -1,7 +1,7 @@
-package DSOO_LABS.laboratorio7.dao;
+package DSOO_LABS.laboratorio9.dao;
 
-import DSOO_LABS.laboratorio7.database.DatabaseConnection;
-import DSOO_LABS.laboratorio7.model.*;
+import DSOO_LABS.laboratorio9.database.DatabaseConnection;
+import DSOO_LABS.laboratorio9.model.*;
 import java.sql.*;
 
 public class UsuarioDAO {

@@ -1,7 +1,7 @@
-package DSOO_LABS.laboratorio7.test;
+package DSOO_LABS.laboratorio9.test;
 
-import DSOO_LABS.laboratorio7.dao.*;
-import DSOO_LABS.laboratorio7.model.*;
+import DSOO_LABS.laboratorio9.dao.*;
+import DSOO_LABS.laboratorio9.model.*;
 import java.util.List;
 
 public class TestTodosDAOs {

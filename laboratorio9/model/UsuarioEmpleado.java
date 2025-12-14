@@ -1,4 +1,4 @@
-package DSOO_LABS.laboratorio7.model;
+package DSOO_LABS.laboratorio9.model;
 
 public class UsuarioEmpleado extends Usuario {
     private Empleado empleado;

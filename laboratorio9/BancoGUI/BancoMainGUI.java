@@ -1,4 +1,4 @@
-package DSOO_LABS.laboratorio7.BancoGUI;
+package DSOO_LABS.laboratorio9.BancoGUI;
 
 import javax.swing.*;
 
