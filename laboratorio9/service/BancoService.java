@@ -1,8 +1,8 @@
-package DSOO_LABS.laboratorio7.service;
+package DSOO_LABS.laboratorio9.service;
 
-import DSOO_LABS.laboratorio7.model.*;
-import DSOO_LABS.laboratorio7.dao.*;  // ¡NUEVO: Importar DAOs en lugar de repos!
-import DSOO_LABS.laboratorio7.util.Validador;
+import DSOO_LABS.laboratorio9.model.*;
+import DSOO_LABS.laboratorio9.dao.*;  // ¡NUEVO: Importar DAOs en lugar de repos!
+import DSOO_LABS.laboratorio9.util.Validador;
 
 import java.util.List;
 
@@ -13,6 +13,7 @@ public class BancoService {
     private CuentaDAO cuentaDAO;
     private TransaccionDAO transaccionDAO;    // NUEVO
     private TitularidadDAO titularidadDAO;    // NUEVO
+    private UsuarioDAO usuarioDAO;
     
     private Usuario usuarioActual;
 
@@ -23,6 +24,11 @@ public class BancoService {
         this.cuentaDAO = new CuentaDAO();
         this.transaccionDAO = new TransaccionDAO();    // NUEVO
         this.titularidadDAO = new TitularidadDAO();    // NUEVO
+        this.usuarioDAO = new UsuarioDAO();
+    }
+    public Usuario login(String username, String password) {
+        // Usamos el DAO real para verificar en la base de datos
+        return usuarioDAO.login(username, password);
     }
 
     public void setUsuarioActual(Usuario usuario) {
@@ -99,37 +105,23 @@ public class BancoService {
         }
     }
 
-    public void agregarCliente(String id, String dni, String nombre, String apellido, 
+   public void agregarCliente(String id, String dni, String nombre, String apellido, 
                                String direccion, String telefono, String correo) {
-        if (!tienePermiso("AGREGAR_CLIENTE")) {
-            mostrarErrorPermiso("Agregar clientes");
-            return;
+        
+        if (!Validador.validarId(id)) throw new RuntimeException("El ID es obligatorio.");
+        if (!Validador.validarDNI(dni)) throw new RuntimeException("El DNI debe tener 8 dígitos exactos.");
+        if (!Validador.validarNombre(nombre)) throw new RuntimeException("El nombre solo debe tener letras.");
+        if (!Validador.validarCorreo(correo)) throw new RuntimeException("El correo no es válido.");
+
+        // 3. Verificar duplicados
+        if (clienteDAO.buscarPorCodigo(id) != null) {
+            throw new RuntimeException("Error: Ya existe un cliente con el ID " + id);
         }
 
-        // Validaciones
-        if (!Validador.validarId(id)) {
-            Validador.mostrarErrorValidacion("ID", "No puede estar vacío");
-            return;
-        }
-
-        if (!Validador.validarDatosCliente(dni, nombre, apellido, direccion, telefono, correo)) {
-            System.out.println(" No se pudo agregar el cliente debido a errores de validación.\n");
-            return;
-        }
-
-        // Verificar si el cliente ya existe en BD
-        Cliente existente = clienteDAO.buscarPorCodigo(id);
-        if (existente != null) {
-            System.out.println(" Ya existe un cliente con el ID: " + id);
-            return;
-        }
-
+        // 4. Guardar
         Cliente nuevo = new Cliente(id, dni, nombre, apellido, direccion, telefono, correo, "Activo");
-        boolean resultado = clienteDAO.agregarCliente(nuevo);
-        if (resultado) {
-            System.out.println("✓ Cliente agregado correctamente a BD: " + nombre + " " + apellido);
-        } else {
-            System.out.println("❌ Error al agregar cliente a BD");
+        if (!clienteDAO.agregarCliente(nuevo)) {
+            throw new RuntimeException("Error crítico de BD: No se pudo guardar el cliente.");
         }
     }
 
@@ -196,34 +188,20 @@ public class BancoService {
 
     public void agregarEmpleado(String id, String dni, String nombre, String apellido, 
                                 String direccion, String telefono, String cargo) {
-        if (!tienePermiso("AGREGAR_EMPLEADO")) {
-            mostrarErrorPermiso("Agregar empleados");
-            return;
+        
+        if (!Validador.validarId(id)) throw new RuntimeException("El ID es obligatorio.");
+        if (!Validador.validarDNI(dni)) throw new RuntimeException("El DNI debe tener 8 dígitos exactos.");
+        if (!Validador.validarNombre(nombre)) throw new RuntimeException("El nombre solo debe tener letras.");
+
+        // 3. Verificar duplicados
+        if (empleadoDAO.buscarPorCodigo(id) != null) {
+            throw new RuntimeException("Error: Ya existe un cliente con el ID " + id);
         }
 
-        if (!Validador.validarId(id)) {
-            Validador.mostrarErrorValidacion("ID", "No puede estar vacío");
-            return;
-        }
-
-        if (!Validador.validarDatosEmpleado(dni, nombre, apellido, direccion, telefono, cargo)) {
-            System.out.println(" No se pudo agregar el empleado debido a errores de validación.\n");
-            return;
-        }
-
-        // Verificar si el empleado ya existe en BD
-        Empleado existente = empleadoDAO.buscarPorCodigo(id);
-        if (existente != null) {
-            System.out.println(" Ya existe un empleado con el ID: " + id);
-            return;
-        }
-
-        Empleado nuevoEmpleado = new Empleado(id, dni, nombre, apellido, direccion, telefono, cargo);
-        boolean resultado = empleadoDAO.agregarEmpleado(nuevoEmpleado);
-        if (resultado) {
-            System.out.println("✓ Empleado agregado correctamente a BD: " + nombre + " " + apellido);
-        } else {
-            System.out.println("❌ Error al agregar empleado a BD");
+        // 4. Guardar
+        Empleado nuevo = new Empleado(id, dni, nombre, apellido, direccion, telefono, cargo);
+        if (!empleadoDAO.agregarEmpleado(nuevo)) {
+            throw new RuntimeException("Error crítico de BD: No se pudo guardar el empleado.");
         }
     }
 
@@ -347,133 +325,62 @@ public class BancoService {
     }
 
     // ========== TRANSACCIONES (COMPLETAMENTE ACTUALIZADO) ==========
-    public void realizarDeposito(String numeroCuenta, double monto, String idEmpleado) {
-        if (!tienePermiso("DEPOSITO")) {
-            mostrarErrorPermiso("Realizar depósitos");
-            return;
-        }
+    // REEMPLAZA SOLO ESTOS DOS MÉTODOS EN TU BancoService ACTUAL
 
+    public void realizarDeposito(String numeroCuenta, double monto, String codigoEmpleado) {
+        // Validaciones que lanzan "Bombas" (Excepciones) para la GUI
         if (!Validador.validarNumeroCuenta(numeroCuenta)) {
-            Validador.mostrarErrorValidacion("Número de cuenta", "Formato inválido");
-            return;
+            throw new RuntimeException("El número de cuenta es inválido.");
+        }
+        if (monto <= 0) {
+            throw new RuntimeException("El monto debe ser positivo.");
         }
 
-        if (!Validador.validarMonto(monto)) {
-            Validador.mostrarErrorValidacion("Monto", "Debe ser mayor a 0");
-            return;
-        }
-
-        // Buscar cuenta en BD
         Cuenta cuenta = cuentaDAO.buscarPorNumero(numeroCuenta);
         if (cuenta == null) {
-            System.out.println(" No se encontró la cuenta: " + numeroCuenta);
-            return;
+            throw new RuntimeException("La cuenta " + numeroCuenta + " no existe.");
         }
 
-        // Obtener IDs para la transacción
+        // Lógica de BD
         int idCuenta = transaccionDAO.obtenerIdCuenta(numeroCuenta);
-        int idEmpleadoBD = transaccionDAO.obtenerIdEmpleado(idEmpleado);
+        int idEmpleadoBD = -1; 
         
-        if (idCuenta == -1) {
-            System.out.println(" Error: No se pudo obtener ID de cuenta");
-            return;
+        // Manejo de empleado nulo (Cajero Automático / Admin)
+        if (codigoEmpleado != null) {
+            idEmpleadoBD = transaccionDAO.obtenerIdEmpleado(codigoEmpleado);
         }
 
-        try {
-            // 1. Actualizar saldo en cuenta
-            double nuevoSaldo = cuenta.getSaldo() + monto;
-            boolean saldoActualizado = cuentaDAO.actualizarSaldo(numeroCuenta, nuevoSaldo);
-            
-            if (!saldoActualizado) {
-                System.out.println("❌ Error al actualizar saldo");
-                return;
-            }
-            
-            // 2. Registrar transacción en BD
-            boolean transaccionRegistrada = transaccionDAO.registrarTransaccion(
-                monto, "DEPOSITO", idCuenta, idEmpleadoBD
-            );
-            
-            if (transaccionRegistrada) {
-                System.out.println("✓ Depósito de S/ " + String.format("%.2f", monto) + 
-                                 " realizado correctamente.");
-                System.out.println("  Nuevo saldo: S/ " + String.format("%.2f", nuevoSaldo));
-            } else {
-                System.out.println("❌ Error al registrar transacción");
-            }
-            
-        } catch (Exception e) {
-            System.err.println("❌ Error en depósito: " + e.getMessage());
+        // Actualizar Saldo
+        double nuevoSaldo = cuenta.getSaldo() + monto;
+        if (!cuentaDAO.actualizarSaldo(numeroCuenta, nuevoSaldo)) {
+            throw new RuntimeException("Error crítico: No se pudo actualizar el saldo en BD.");
         }
+        
+        // Registrar Historial
+        transaccionDAO.registrarTransaccion(monto, "DEPOSITO", idCuenta, idEmpleadoBD);
     }
 
-    public void realizarRetiro(String numeroCuenta, double monto, String idEmpleado) {
-        if (!tienePermiso("RETIRO")) {
-            mostrarErrorPermiso("Realizar retiros");
-            return;
-        }
+    public void realizarRetiro(String numeroCuenta, double monto, String codigoEmpleado) {
+        if (!Validador.validarNumeroCuenta(numeroCuenta)) throw new RuntimeException("Cuenta inválida.");
+        if (monto <= 0) throw new RuntimeException("Monto inválido.");
 
-        if (!Validador.validarNumeroCuenta(numeroCuenta)) {
-            Validador.mostrarErrorValidacion("Número de cuenta", "Formato inválido");
-            return;
-        }
-
-        if (!Validador.validarMonto(monto)) {
-            Validador.mostrarErrorValidacion("Monto", "Debe ser mayor a 0");
-            return;
-        }
-
-        // Buscar cuenta en BD
         Cuenta cuenta = cuentaDAO.buscarPorNumero(numeroCuenta);
-        if (cuenta == null) {
-            System.out.println(" No se encontró la cuenta: " + numeroCuenta);
-            return;
+        if (cuenta == null) throw new RuntimeException("La cuenta no existe.");
+
+        if (cuenta.getSaldo() < monto) {
+            throw new RuntimeException("Saldo insuficiente. Tienes: S/ " + cuenta.getSaldo());
         }
 
-        if (!Validador.validarSaldoSuficiente(cuenta.getSaldo(), monto)) {
-            System.out.println(" Saldo insuficiente para realizar el retiro.");
-            System.out.println("  Saldo actual: S/ " + String.format("%.2f", cuenta.getSaldo()));
-            System.out.println("  Monto solicitado: S/ " + String.format("%.2f", monto));
-            return;
-        }
-
-        // Obtener IDs para la transacción
         int idCuenta = transaccionDAO.obtenerIdCuenta(numeroCuenta);
-        int idEmpleadoBD = transaccionDAO.obtenerIdEmpleado(idEmpleado);
+        int idEmpleadoBD = (codigoEmpleado != null) ? transaccionDAO.obtenerIdEmpleado(codigoEmpleado) : -1;
+
+        double nuevoSaldo = cuenta.getSaldo() - monto;
+        if (!cuentaDAO.actualizarSaldo(numeroCuenta, nuevoSaldo)) {
+            throw new RuntimeException("Error al actualizar saldo.");
+        }
         
-        if (idCuenta == -1) {
-            System.out.println(" Error: No se pudo obtener ID de cuenta");
-            return;
-        }
-
-        try {
-            // 1. Actualizar saldo en cuenta
-            double nuevoSaldo = cuenta.getSaldo() - monto;
-            boolean saldoActualizado = cuentaDAO.actualizarSaldo(numeroCuenta, nuevoSaldo);
-            
-            if (!saldoActualizado) {
-                System.out.println("❌ Error al actualizar saldo");
-                return;
-            }
-            
-            // 2. Registrar transacción en BD
-            boolean transaccionRegistrada = transaccionDAO.registrarTransaccion(
-                monto, "RETIRO", idCuenta, idEmpleadoBD
-            );
-            
-            if (transaccionRegistrada) {
-                System.out.println("✓ Retiro de S/ " + String.format("%.2f", monto) + 
-                                 " realizado correctamente.");
-                System.out.println("  Nuevo saldo: S/ " + String.format("%.2f", nuevoSaldo));
-            } else {
-                System.out.println("❌ Error al registrar transacción");
-            }
-            
-        } catch (Exception e) {
-            System.err.println("❌ Error en retiro: " + e.getMessage());
-        }
+        transaccionDAO.registrarTransaccion(monto, "RETIRO", idCuenta, idEmpleadoBD);
     }
-
     public void verMovimientos(String numeroCuenta) {
         if (!tienePermiso("VER_MOVIMIENTOS")) {
             mostrarErrorPermiso("Ver movimientos");
@@ -602,6 +509,13 @@ public class BancoService {
     public CuentaDAO getCuentaDAO() {
         return cuentaDAO;
     }
+    public TransaccionDAO getTransaccionDAO() {
+        return transaccionDAO;
+    }
+    
+    public TitularidadDAO getTitularidadDAO() {
+        return titularidadDAO;
+    }
     
     // Métodos antiguos para compatibilidad (se usarán temporalmente)
     public Object getClienteRepo() {
@@ -617,14 +531,5 @@ public class BancoService {
     public Object getCuentaRepo() {
         System.out.println("⚠ Usando getCuentaRepo() obsoleto - usar getCuentaDAO()");
         return cuentaDAO;
-    }
-    
-    // Nuevos getters para los DAOs adicionales
-    public TransaccionDAO getTransaccionDAO() {
-        return transaccionDAO;
-    }
-    
-    public TitularidadDAO getTitularidadDAO() {
-        return titularidadDAO;
     }
 }
