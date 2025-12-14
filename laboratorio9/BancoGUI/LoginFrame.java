@@ -1,23 +1,18 @@
-package DSOO_LABS.laboratorio7.BancoGUI;
+package DSOO_LABS.laboratorio9.BancoGUI; // Nota el cambio a lab9
 
-import DSOO_LABS.laboratorio7.service.BancoService;
-import DSOO_LABS.laboratorio7.service.GestorClinica;
-import DSOO_LABS.laboratorio7.model.Usuario;
+import DSOO_LABS.laboratorio9.service.BancoService;
+import DSOO_LABS.laboratorio9.model.Usuario;
 import javax.swing.*;
 import java.awt.*;
 
 public class LoginFrame extends JFrame {
     private BancoService bancoService;
-    private GestorClinica gestorClinica;
     private JTextField txtUsuario;
     private JPasswordField txtPassword;
     
     public LoginFrame() {
+        // Inicializamos el servicio UNIFICADO
         bancoService = new BancoService();
-        gestorClinica = new GestorClinica(
-            bancoService.getClienteDAO(),
-            bancoService.getEmpleadoDAO()
-        );
         
         setTitle("Login - Sistema Bancario");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -55,15 +50,18 @@ public class LoginFrame extends JFrame {
         String usuario = txtUsuario.getText().trim();
         String password = new String(txtPassword.getPassword()).trim();
         
-        Usuario usuarioAutenticado = gestorClinica.login(usuario, password);
+        // Llamada limpia al servicio (Sin intermediarios raros)
+        Usuario usuarioAutenticado = bancoService.login(usuario, password);
         
         if (usuarioAutenticado != null) {
             bancoService.setUsuarioActual(usuarioAutenticado);
+            
+            // Pasamos el servicio autenticado al MainFrame
             MainFrame mainFrame = new MainFrame(bancoService);
             mainFrame.setVisible(true);
-            dispose();
+            this.dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Credenciales incorrectas");
+            JOptionPane.showMessageDialog(this, "Credenciales incorrectas.\nPrueba: admin / admin123");
         }
     }
 }

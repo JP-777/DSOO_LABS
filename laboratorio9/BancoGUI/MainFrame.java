@@ -1,8 +1,8 @@
-package DSOO_LABS.laboratorio7.BancoGUI;
+package DSOO_LABS.laboratorio9.BancoGUI;
 
-import DSOO_LABS.laboratorio7.service.BancoService;
-import DSOO_LABS.laboratorio7.model.*;
-import DSOO_LABS.laboratorio7.util.Validador;
+import DSOO_LABS.laboratorio9.service.BancoService;
+import DSOO_LABS.laboratorio9.model.*;
+import DSOO_LABS.laboratorio9.util.Validador;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -491,74 +491,102 @@ public class MainFrame extends JFrame {
     }
     
     // ========== PANEL PERFIL ==========
-    private JPanel crearPanelPerfil() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+   private JPanel crearPanelPerfil() {
+        // 1. Panel principal que centra el contenido
+        JPanel panelPrincipal = new JPanel(new GridBagLayout());
+        panelPrincipal.setBackground(new Color(240, 245, 250)); // Fondo suave
+
+        // 2. La "Tarjeta" blanca del perfil
+        JPanel tarjeta = new JPanel(new GridBagLayout());
+        tarjeta.setBackground(Color.WHITE);
+        tarjeta.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
+            BorderFactory.createEmptyBorder(30, 40, 30, 40)
+        ));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 15, 10, 15); // Espacio entre elementos
+        gbc.anchor = GridBagConstraints.WEST;    // Alinear texto a la izquierda
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // --- TÍTULO ---
+        JLabel lblTitulo = new JLabel("Mi Perfil de Usuario");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 22));
+        lblTitulo.setForeground(new Color(0, 51, 102)); // Azul oscuro
+        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         
-        JPanel panelInfo = new JPanel(new GridLayout(0, 2, 10, 10));
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+        gbc.insets = new Insets(0, 0, 20, 0); // Más espacio debajo del título
+        tarjeta.add(lblTitulo, gbc);
+
+        // Reset constraints para los datos
+        gbc.gridwidth = 1;
+        gbc.insets = new Insets(8, 10, 8, 10);
+        Font fontLabel = new Font("Arial", Font.BOLD, 14);
+        Font fontValue = new Font("Arial", Font.PLAIN, 14);
+
+        // --- DATOS GENÉRICOS ---
+        agregarDatoPerfil(tarjeta, "Usuario:", usuarioActual.getNombreUsuario(), gbc, 1, fontLabel, fontValue);
+        agregarDatoPerfil(tarjeta, "Rol del Sistema:", usuarioActual.getTipo(), gbc, 2, fontLabel, fontValue);
         
-        panelInfo.add(new JLabel("Usuario:"));
-        panelInfo.add(new JLabel(usuarioActual.getNombreUsuario()));
-        
-        panelInfo.add(new JLabel("Rol:"));
-        panelInfo.add(new JLabel(usuarioActual.getTipo()));
-        
+        // --- LÍNEA SEPARADORA ---
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
+        tarjeta.add(new JSeparator(), gbc);
+        gbc.gridwidth = 1;
+
+        // --- DATOS ESPECÍFICOS ---
+        int fila = 4;
         if (rol.equals("CLIENTE")) {
             UsuarioCliente uc = (UsuarioCliente) usuarioActual;
             Cliente cliente = uc.getCliente();
-            
-            panelInfo.add(new JLabel("ID Cliente:"));
-            panelInfo.add(new JLabel(cliente.getIdCliente()));
-            
-            panelInfo.add(new JLabel("Nombre:"));
-            panelInfo.add(new JLabel(cliente.getNombre() + " " + cliente.getApellido()));
-            
-            panelInfo.add(new JLabel("DNI:"));
-            panelInfo.add(new JLabel(cliente.getDni()));
-            
-            panelInfo.add(new JLabel("Correo:"));
-            panelInfo.add(new JLabel(cliente.getCorreo()));
-            
-            panelInfo.add(new JLabel("Teléfono:"));
-            panelInfo.add(new JLabel(cliente.getTelefono()));
-            
-            panelInfo.add(new JLabel("Dirección:"));
-            panelInfo.add(new JLabel(cliente.getDireccion()));
-            
+            agregarDatoPerfil(tarjeta, "Nombre Completo:", cliente.getNombre() + " " + cliente.getApellido(), gbc, fila++, fontLabel, fontValue);
+            agregarDatoPerfil(tarjeta, "DNI:", cliente.getDni(), gbc, fila++, fontLabel, fontValue);
+            agregarDatoPerfil(tarjeta, "Código Cliente:", cliente.getIdCliente(), gbc, fila++, fontLabel, fontValue);
+            agregarDatoPerfil(tarjeta, "Correo:", cliente.getCorreo(), gbc, fila++, fontLabel, fontValue);
+            agregarDatoPerfil(tarjeta, "Dirección:", cliente.getDireccion(), gbc, fila++, fontLabel, fontValue);
         } else if (rol.equals("EMPLEADO")) {
             UsuarioEmpleado ue = (UsuarioEmpleado) usuarioActual;
             Empleado empleado = ue.getEmpleado();
-            
-            panelInfo.add(new JLabel("ID Empleado:"));
-            panelInfo.add(new JLabel(empleado.getIdEmpleado()));
-            
-            panelInfo.add(new JLabel("Nombre:"));
-            panelInfo.add(new JLabel(empleado.getNombre() + " " + empleado.getApellido()));
-            
-            panelInfo.add(new JLabel("DNI:"));
-            panelInfo.add(new JLabel(empleado.getDni()));
-            
-            panelInfo.add(new JLabel("Cargo:"));
-            panelInfo.add(new JLabel(empleado.getCargo()));
-            
-            panelInfo.add(new JLabel("Teléfono:"));
-            panelInfo.add(new JLabel(empleado.getTelefono()));
-            
-        } else if (rol.equals("ADMINISTRADOR")) {
-            panelInfo.add(new JLabel("Departamento:"));
-            panelInfo.add(new JLabel("Administración"));
-            
-            panelInfo.add(new JLabel("Permisos:"));
-            panelInfo.add(new JLabel("Acceso completo al sistema"));
+            agregarDatoPerfil(tarjeta, "Nombre Completo:", empleado.getNombre() + " " + empleado.getApellido(), gbc, fila++, fontLabel, fontValue);
+            agregarDatoPerfil(tarjeta, "DNI:", empleado.getDni(), gbc, fila++, fontLabel, fontValue);
+            agregarDatoPerfil(tarjeta, "Código Empleado:", empleado.getIdEmpleado(), gbc, fila++, fontLabel, fontValue);
+            agregarDatoPerfil(tarjeta, "Cargo:", empleado.getCargo(), gbc, fila++, fontLabel, fontValue);
+        } else {
+             agregarDatoPerfil(tarjeta, "Departamento:", "Sistemas / Administración", gbc, fila++, fontLabel, fontValue);
+             agregarDatoPerfil(tarjeta, "Nivel Acceso:", "Total (Root)", gbc, fila++, fontLabel, fontValue);
         }
+
+        // --- BOTÓN ---
+        gbc.gridx = 0; gbc.gridy = fila; gbc.gridwidth = 2;
+        gbc.insets = new Insets(20, 0, 0, 0);
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.CENTER;
         
-        panel.add(panelInfo, BorderLayout.CENTER);
-        
-        JButton btnPermisos = new JButton("📋 Ver Mis Permisos");
+        JButton btnPermisos = new JButton("Ver Detalles de Permisos");
+        btnPermisos.setBackground(new Color(70, 130, 180));
+        btnPermisos.setForeground(Color.BLACK); // Texto negro para asegurar visibilidad en Mac/Win
         btnPermisos.addActionListener(e -> usuarioActual.mostrarPermisos());
-        panel.add(btnPermisos, BorderLayout.SOUTH);
+        tarjeta.add(btnPermisos, gbc);
+
+        panelPrincipal.add(tarjeta);
+        return panelPrincipal;
+    }
+
+    // Método auxiliar para no repetir código
+    private void agregarDatoPerfil(JPanel panel, String titulo, String valor, GridBagConstraints gbc, int fila, Font fTitulo, Font fValor) {
+        gbc.gridy = fila;
         
-        return panel;
+        gbc.gridx = 0;
+        JLabel lblT = new JLabel(titulo);
+        lblT.setFont(fTitulo);
+        lblT.setForeground(Color.GRAY);
+        panel.add(lblT, gbc);
+
+        gbc.gridx = 1;
+        JLabel lblV = new JLabel(valor);
+        lblV.setFont(fValor);
+        lblV.setForeground(Color.BLACK);
+        panel.add(lblV, gbc);
     }
     
     // ========== PANEL CLIENTES ==========
@@ -881,18 +909,48 @@ public class MainFrame extends JFrame {
     private void cargarTransacciones() {
         if (modeloTransacciones == null) return;
         
-        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+        // SwingWorker para cargar en segundo plano
+        SwingWorker<List<Transaccion>, Void> worker = new SwingWorker<List<Transaccion>, Void>() {
             @Override
-            protected Void doInBackground() throws Exception {
-                return null;
+            protected List<Transaccion> doInBackground() throws Exception {
+                // Trae los datos de la Base de Datos
+                return bancoService.getTransaccionDAO().obtenerUltimasTransacciones();
             }
             
             @Override
             protected void done() {
-                modeloTransacciones.setRowCount(0);
-                // Datos de ejemplo
-                modeloTransacciones.addRow(new Object[]{"T001", "DEPOSITO", "S/ 500.00", "1001", "2024-01-15", "E001"});
-                modeloTransacciones.addRow(new Object[]{"T002", "RETIRO", "S/ 200.00", "1002", "2024-01-16", "E002"});
+                try {
+                    List<Transaccion> lista = get(); // Obtener resultado
+                    modeloTransacciones.setRowCount(0); // Limpiar tabla
+                    
+                    for (Transaccion t : lista) {
+                        // LÓGICA CORREGIDA PARA EL RESPONSABLE
+                        String responsable = "Cajero/Web";
+                        
+                        if (t.getEmpleado() != null) {
+                            // Aquí mostramos el ID (E001) en lugar del Nombre
+                            responsable = t.getEmpleado().getIdEmpleado();
+                            
+                            // Si por alguna razón el ID está vacío, ponemos un fallback
+                            if (responsable == null || responsable.isEmpty()) {
+                                responsable = "Empleado (Sin ID)";
+                            }
+                        }
+
+                        // Agregar fila a la tabla
+                        modeloTransacciones.addRow(new Object[]{
+                            t.getIdTransaccion(),
+                            (t instanceof Deposito) ? "DEPOSITO" : "RETIRO",
+                            "S/ " + String.format("%.2f", t.getMonto()),
+                            (t.getCuenta() != null) ? t.getCuenta().getNumeroCuenta() : "---",
+                            t.getFecha().toString().replace("T", " ").substring(0, 16), // Formato de fecha más limpio
+                            responsable // <--- Columna Empleado (ID)
+                        });
+                    }
+                } catch (Exception e) {
+                    System.out.println("Error visualizando transacciones: " + e.getMessage());
+                    e.printStackTrace();
+                }
             }
         };
         worker.execute();
@@ -908,6 +966,7 @@ public class MainFrame extends JFrame {
         JPanel panel = new JPanel(new GridLayout(8, 2, 10, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
+        // Componentes visuales
         JTextField txtId = new JTextField();
         JTextField txtDni = new JTextField();
         JTextField txtNombre = new JTextField();
@@ -916,36 +975,39 @@ public class MainFrame extends JFrame {
         JTextField txtTelefono = new JTextField();
         JTextField txtCorreo = new JTextField();
         
-        panel.add(new JLabel("ID (C001):"));
-        panel.add(txtId);
-        panel.add(new JLabel("DNI:"));
-        panel.add(txtDni);
-        panel.add(new JLabel("Nombre:"));
-        panel.add(txtNombre);
-        panel.add(new JLabel("Apellido:"));
-        panel.add(txtApellido);
-        panel.add(new JLabel("Dirección:"));
-        panel.add(txtDireccion);
-        panel.add(new JLabel("Teléfono:"));
-        panel.add(txtTelefono);
-        panel.add(new JLabel("Correo:"));
-        panel.add(txtCorreo);
+        panel.add(new JLabel("ID (C00X):")); panel.add(txtId);
+        panel.add(new JLabel("DNI (8 dígitos):")); panel.add(txtDni);
+        panel.add(new JLabel("Nombre:")); panel.add(txtNombre);
+        panel.add(new JLabel("Apellido:")); panel.add(txtApellido);
+        panel.add(new JLabel("Dirección:")); panel.add(txtDireccion);
+        panel.add(new JLabel("Teléfono:")); panel.add(txtTelefono);
+        panel.add(new JLabel("Correo:")); panel.add(txtCorreo);
         
         JButton btnGuardar = new JButton("Guardar");
         JButton btnCancelar = new JButton("Cancelar");
         
+        // ACCIÓN DEL BOTÓN GUARDAR
         btnGuardar.addActionListener(e -> {
-            if (validarCamposCliente(txtId.getText(), txtDni.getText(), txtNombre.getText(),
-                txtApellido.getText(), txtDireccion.getText(), txtTelefono.getText(),
-                txtCorreo.getText())) {
-                
+            try {
+                // Llamamos al servicio (que ahora validará y lanzará error si falla)
                 bancoService.agregarCliente(
-                    txtId.getText(), txtDni.getText(), txtNombre.getText(),
-                    txtApellido.getText(), txtDireccion.getText(), txtTelefono.getText(),
-                    txtCorreo.getText()
+                    txtId.getText().trim(), 
+                    txtDni.getText().trim(), 
+                    txtNombre.getText().trim(),
+                    txtApellido.getText().trim(), 
+                    txtDireccion.getText().trim(), 
+                    txtTelefono.getText().trim(),
+                    txtCorreo.getText().trim()
                 );
-                cargarClientes();
-                dialogo.dispose();
+                
+                // Si llegamos aquí, todo salió bien
+                JOptionPane.showMessageDialog(dialogo, "✅ Cliente agregado correctamente");
+                cargarClientes(); // Refrescamos la tabla
+                dialogo.dispose(); // Cerramos la ventanita
+                
+            } catch (RuntimeException ex) {
+                // ¡AQUÍ CAPTURAMOS EL ERROR Y MOSTRAMOS LA VENTANA!
+                JOptionPane.showMessageDialog(dialogo, "⚠️ " + ex.getMessage(), "Error de Validación", JOptionPane.WARNING_MESSAGE);
             }
         });
         
@@ -959,15 +1021,6 @@ public class MainFrame extends JFrame {
         dialogo.add(panel, BorderLayout.CENTER);
         dialogo.add(panelBotones, BorderLayout.SOUTH);
         dialogo.setVisible(true);
-    }
-    
-    private boolean validarCamposCliente(String id, String dni, String nombre, String apellido,
-                                        String direccion, String telefono, String correo) {
-        if (id.isEmpty() || dni.isEmpty() || nombre.isEmpty() || apellido.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Complete todos los campos obligatorios");
-            return false;
-        }
-        return true;
     }
     
     private void buscarCliente() {
@@ -1016,36 +1069,33 @@ public class MainFrame extends JFrame {
         JTextField txtTelefono = new JTextField();
         JTextField txtCargo = new JTextField();
         
-        panel.add(new JLabel("ID (E001):"));
-        panel.add(txtId);
-        panel.add(new JLabel("DNI:"));
-        panel.add(txtDni);
-        panel.add(new JLabel("Nombre:"));
-        panel.add(txtNombre);
-        panel.add(new JLabel("Apellido:"));
-        panel.add(txtApellido);
-        panel.add(new JLabel("Dirección:"));
-        panel.add(txtDireccion);
-        panel.add(new JLabel("Teléfono:"));
-        panel.add(txtTelefono);
-        panel.add(new JLabel("Cargo:"));
-        panel.add(txtCargo);
+        panel.add(new JLabel("ID (E00X):")); panel.add(txtId);
+        panel.add(new JLabel("DNI:")); panel.add(txtDni);
+        panel.add(new JLabel("Nombre:")); panel.add(txtNombre);
+        panel.add(new JLabel("Apellido:")); panel.add(txtApellido);
+        panel.add(new JLabel("Dirección:")); panel.add(txtDireccion);
+        panel.add(new JLabel("Teléfono:")); panel.add(txtTelefono);
+        panel.add(new JLabel("Cargo:")); panel.add(txtCargo);
         
         JButton btnGuardar = new JButton("Guardar");
         JButton btnCancelar = new JButton("Cancelar");
         
         btnGuardar.addActionListener(e -> {
-            if (validarCamposEmpleado(txtId.getText(), txtDni.getText(), txtNombre.getText(),
-                txtApellido.getText(), txtDireccion.getText(), txtTelefono.getText(),
-                txtCargo.getText())) {
-                
+            try {
+                // Llamamos al servicio
                 bancoService.agregarEmpleado(
-                    txtId.getText(), txtDni.getText(), txtNombre.getText(),
-                    txtApellido.getText(), txtDireccion.getText(), txtTelefono.getText(),
-                    txtCargo.getText()
+                    txtId.getText().trim(), txtDni.getText().trim(), txtNombre.getText().trim(),
+                    txtApellido.getText().trim(), txtDireccion.getText().trim(), txtTelefono.getText().trim(),
+                    txtCargo.getText().trim()
                 );
+                
+                JOptionPane.showMessageDialog(dialogo, "✅ Empleado registrado");
                 cargarEmpleados();
                 dialogo.dispose();
+                
+            } catch (RuntimeException ex) {
+                 // Capturamos el error
+                 JOptionPane.showMessageDialog(dialogo, "⚠️ " + ex.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
             }
         });
         
@@ -1059,15 +1109,6 @@ public class MainFrame extends JFrame {
         dialogo.add(panel, BorderLayout.CENTER);
         dialogo.add(panelBotones, BorderLayout.SOUTH);
         dialogo.setVisible(true);
-    }
-    
-    private boolean validarCamposEmpleado(String id, String dni, String nombre, String apellido,
-                                         String direccion, String telefono, String cargo) {
-        if (id.isEmpty() || dni.isEmpty() || nombre.isEmpty() || apellido.isEmpty() || cargo.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Complete todos los campos obligatorios");
-            return false;
-        }
-        return true;
     }
     
     private void agregarCuenta() {
@@ -1166,15 +1207,24 @@ public class MainFrame extends JFrame {
         
         btnDepositar.addActionListener(e -> {
             try {
-                bancoService.realizarDeposito(
+                String codigoActor = null;
+                if (usuarioActual instanceof UsuarioEmpleado) {
+                    codigoActor = ((UsuarioEmpleado) usuarioActual).getEmpleado().getIdEmpleado();
+                } 
+                bancoService.realizarDeposito( // o realizarRetiro
                     txtCuenta.getText(),
                     Double.parseDouble(txtMonto.getText()),
-                    "E001"
+                    codigoActor // <--- Esto enviará "E002" o NULL automáticamente
                 );
-                cargarCuentas();
+                JOptionPane.showMessageDialog(dialogo, "✅ Depósito realizado con éxito");
+                cargarCuentas();      
+                cargarTransacciones(); 
                 dialogo.dispose();
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(dialogo, "Monto inválido");
+                JOptionPane.showMessageDialog(dialogo, "❌ El monto debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (RuntimeException ex) {
+                // ¡AQUÍ CAPTURAMOS TUS ERRORES DE LÓGICA!
+                JOptionPane.showMessageDialog(dialogo, "❌ " + ex.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
             }
         });
         
@@ -1208,15 +1258,26 @@ public class MainFrame extends JFrame {
         
         btnRetirar.addActionListener(e -> {
             try {
-                bancoService.realizarRetiro(
+                String codigoActor = null;
+                if (usuarioActual instanceof UsuarioEmpleado) {
+                    codigoActor = ((UsuarioEmpleado) usuarioActual).getEmpleado().getIdEmpleado();
+                } 
+                bancoService.realizarRetiro( // o realizarRetiro
                     txtCuenta.getText(),
                     Double.parseDouble(txtMonto.getText()),
-                    "E001"
+                    codigoActor // <--- Esto enviará "E002" o NULL automáticamente
                 );
-                cargarCuentas();
+                
+                JOptionPane.showMessageDialog(dialogo, "✅ Retiro realizado con éxito");
+                cargarCuentas();      
+                cargarTransacciones(); 
                 dialogo.dispose();
+                
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(dialogo, "Monto inválido");
+                JOptionPane.showMessageDialog(dialogo, "❌ El monto debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            } catch (RuntimeException ex) {
+                // Errores de lógica (Saldo insuficiente, cuenta no existe)
+                JOptionPane.showMessageDialog(dialogo, "❌ " + ex.getMessage(), "Error", JOptionPane.WARNING_MESSAGE);
             }
         });
         
