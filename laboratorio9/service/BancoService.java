@@ -163,7 +163,7 @@ public class BancoService {
         if (resultado) {
             System.out.println("✓ Cliente eliminado correctamente de BD");
         } else {
-            System.out.println("❌ No se pudo eliminar el cliente");
+            System.out.println(" No se pudo eliminar el cliente");
         }
     }
 
@@ -256,10 +256,10 @@ public class BancoService {
         boolean resultado = cuentaDAO.agregarCuenta(nuevaCuenta);
         if (resultado) {
             System.out.println("✓ Cuenta agregada correctamente a BD.");
-            System.out.println("⚠ NOTA: Esta cuenta no está asignada a ningún cliente.");
+            System.out.println(" NOTA: Esta cuenta no está asignada a ningún cliente.");
             System.out.println("   Use 'Asignar cuenta a cliente' para vincularla.");
         } else {
-            System.out.println("❌ Error al agregar cuenta a BD");
+            System.out.println(" Error al agregar cuenta a BD");
         }
     }
 
@@ -276,9 +276,9 @@ public class BancoService {
 
         boolean resultado = cuentaDAO.eliminarCuenta(numero);
         if (resultado) {
-            System.out.println("✓ Cuenta eliminada correctamente de BD");
+            System.out.println(" Cuenta eliminada correctamente de BD");
         } else {
-            System.out.println("❌ No se pudo eliminar la cuenta");
+            System.out.println(" No se pudo eliminar la cuenta");
         }
     }
 
@@ -463,7 +463,7 @@ public class BancoService {
                                    cliente.getNombre() + " " + cliente.getApellido());
             }
         } else {
-            System.out.println("❌ No se pudo asignar la cuenta al cliente");
+            System.out.println(" No se pudo asignar la cuenta al cliente");
         }
     }
 
@@ -476,7 +476,7 @@ public class BancoService {
         // Buscar cliente en BD
         Cliente cliente = clienteDAO.buscarPorCodigo(idCliente);
         if (cliente == null) {
-            System.out.println("❌ Cliente no encontrado: " + idCliente);
+            System.out.println(" Cliente no encontrado: " + idCliente);
             return;
         }
 
